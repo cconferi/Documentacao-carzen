@@ -1,0 +1,193 @@
+---
+openapi: 3.0.3
+info:
+  title: Ms integração carzen
+  description: Documentação de rotas do ms integração.
+  version: "1.0"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+servers:
+  - url: http://localhost:8081/
+    description: Main (localhost)
+tags:
+- name: "Consulta"
+  description: "Endpoints e funcionalidades de /client/{...}"
+paths:
+  /consulta/carregarConsulta:
+    post:
+      tags:
+        - "Consulta"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ListObjectOutput'
+  /consulta/carregarConsultaFornecedor:
+    post:
+      tags:
+      - "Consulta"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/ListResultDataProviderDto'
+  /consulta/executarConsulta/{consulta}:
+    post:
+      tags:
+      - "Consulta"
+      parameters:
+      - name: consulta
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/TipoConsulta'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json;charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/SaidaDto'
+components:
+  schemas:
+    ObjectOutput:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ListObject'
+        label:
+          type: string
+        name:
+          type: string
+        obs:
+          type: string
+        status:
+          $ref: '#/components/schemas/SituacaoConsulta'
+        type:
+          $ref: '#/components/schemas/TypeObject'
+        value:
+          type: object
+    ListObjectOutput:
+      type: array
+      items:
+        $ref: '#/components/schemas/ObjectOutput'
+    ListObject:
+      type: array
+      items: {}
+    SituacaoConsulta:
+      enum:
+      - DANGER
+      - INFO
+      - SUCCESS
+      - WARNING
+      type: string
+    TypeObject:
+      enum:
+      - BLOCO
+      - BLOCO_CONDENSADO
+      - BOOL
+      - CHART
+      - CONSULT
+      - DATE
+      - DOUBLE
+      - ENUM_COMBUSTIVEL
+      - ENUM_COR
+      - ENUM_ESPECIE_VEICULO
+      - ENUM_OPCIONAIS_ACESSORIOS
+      - ENUM_PROCEDENCIA_VEICULO
+      - ENUM_SEMAFORO
+      - ENUM_SITUACAO_VEICULO
+      - ENUM_TIPO_VEICULO
+      - INT
+      - OBJ
+      - PHOTO
+      - PROGRESS
+      - STR
+      type: string
+    ResultDataProviderDto:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TipoDocumento'
+        value:
+          type: string
+    ListResultDataProviderDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResultDataProviderDto'
+    TipoDocumento:
+      enum:
+      - COMPLEMENTO
+      - FORNECEDOR
+      - RETORNOCLIENTE
+      type: string
+    TipoConsulta:
+      enum:
+      - AGREGADOS
+      - BINESTADUAL
+      - BINFEDERAL
+      - BINRENAJUDROUBOFURTO
+      - BINROUBOFURTO
+      - CNH
+      - COTACAOSEGURO
+      - CRLV
+      - DECODIFICADOR
+      - DESVALORIZACAOMEDIA
+      - DUPLICIDADEMOTOR
+      - GRAVAME
+      - HISTORICOPROPRIETARIO
+      - HISTORICOROUBOFURTO
+      - INDICIOSINISTRO
+      - INDICIOSINISTRO2
+      - LEILAO
+      - LEILAOABSOLUTA
+      - LEILAOINFOCAR
+      - LOCALIZADORPLACA
+      - LOCALIZAVEICULOS
+      - PARECERTECNICO
+      - PRECIFICADOR
+      - PRECIFICADORPLACACHASSI
+      - PRECOMERCADOKBB
+      - PRECOMERCADOMOLICAR
+      - PRECOMERCADOWEBMOTORS
+      - RECALL
+      - REMARKETING
+      - RENAVAM
+      type: string
+    TipoFornecedor:
+      enum:
+      - ABSOLUTA
+      - APIPLACAS
+      - INFOSIMPLES
+      - MOTORHUB
+      - RG
+      type: string
+    Date:
+      format: date
+      type: string
+    StatusRetorno:
+      enum:
+      - ERROFORNECEDOR
+      - INDISPONIVEL
+      - NENHUMREGISTROSLOCALIZADOS
+      - REGISTROSLOCALIZADOS
+      type: string
+    SaidaDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Date'
+        statusRetorno:
+          $ref: '#/components/schemas/StatusRetorno'
+        tempoProcessamento:
+          format: double
+          type: number
+        tipoConsulta:
+          $ref: '#/components/schemas/TipoConsulta'
+        token:
+          type: string

@@ -1,0 +1,3943 @@
+openapi: 3.0.1
+info:
+  title: Sample API
+  description: carzen.
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080/CarzenWebservice/
+    description:  (homologação)
+tags:
+  - name: Clientes
+    description: "Endpoints e funcionalidades de /cliente/{...}" 
+  - name: Compras
+    description: "Endpoints e funcionalidades de compra/{...}"
+  - name: Consultas
+    description: "Endpoints e funcionalidades de consultar/{...}"
+  - name: Dados Cartao
+    description: "Endpoints e funcionalidades de dadosCartao/{...}"
+  - name: Health
+    description: "Endpoints e funcionalidades de health/{...}"
+  - name: FAQ
+    description: "Endpoints e funcionalidades de faq/{...}"
+  - name: NF-e
+    description: "Endpoints e funcionalidades de nfe/{...}"
+  - name: Pagamentos
+    description: "Endpoints e funcionalidades de pagamento/{...}"
+  - name: Respostas
+    description: "Endpoints e funcionalidades de respostaPagSeguro/{...} e respostaIugu/{...}"
+  - name: Relatorios
+    description: "Endpoints e funcionalidades de relatorioConsulta/{...}"
+  - name: Suporte
+    description: "Endpoints e funcionalidades de suporte/{...}"
+  - name: Carregar
+    description: "Endpoints e funcionalidades de carregar.../{...}"
+  - name: Util
+    description: "Endpoints e funcionalidades de util/{...}"
+  - name: Email
+    description: "Endpoints e funcionalidades de email-files/{...}"
+  - name: Documentos
+    description: "Endpoints e funcionalidades de documentosAceite/{...}"
+paths:
+  /cliente/login:
+    post:
+      tags:
+        - Clientes
+      description: Realiza o login do cliente.
+      operationId: loginCliente
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/LoginDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+                
+  /cliente/verificarEmail:
+    post:
+      tags:
+        - Clientes
+      description: Realiza a verificação de email.
+      operationId: verificarEmail
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/RecuperarSenhaDTO'
+      responses:
+        '200':
+          description: OK
+  /cliente/recuperarSenha:
+    post:
+      tags:
+        - Clientes
+      description: Realiza a recuperação de senha.
+      operationId: mudarSenha
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/RecuperarSenhaDTO'
+      responses:
+        '200':
+          description: E-mail de recuperação enviado com sucesso.
+        '500':
+          description: E-mail não encontrado no sistema.
+  /cliente/cep/{cep}:
+    get:
+      tags:
+        - Clientes
+      description: Retorna o endereço usando CEP como parâmetro.
+      operationId: cep
+      parameters:
+        - name: cep
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ViaCepDTO'
+  /cliente/validaDocumento:
+    get:
+      tags:
+        - Clientes
+      description: Valida o documento correspondente ao parâmetro.
+      operationId: validaDocumento
+      parameters:
+        - name: documento
+          in: query
+          schema:
+            type: string
+        - name: id
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+  /cliente/listarClientes:
+    post:
+      tags:
+        - Clientes
+      description: Retorna uma lista de clientes correspondente ao parâmetro.
+      operationId: listarCliente
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/UsuarioDto'
+  /cliente/editarCliente:
+    post:
+      tags:
+        - Clientes
+      description: Edita o cliente correspondente ao parâmetro.
+      operationId: editarCliente
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/UsuarioDto'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+  /cliente/atualizarSenha:
+    post:
+      tags:
+        - Clientes
+      description: Atualiza a senha do cliente correspondente ao parâmetro.
+      operationId: atualizarSenha
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: object
+              properties:
+                  senhaAntiga:
+                    type: string
+                  senhaNova:
+                    type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/carregarValorCarteiraConsultasPermissoes:
+    get:
+      tags:
+        - Clientes
+      description: Retorna o valor de crédito do cliente.
+      operationId: carregarValorCarteiraConsultasPermissoes
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ValorCarteiraConsultaDTO'
+        '500':
+          description: Unexpected error.
+  /cliente/atualizaDadosConta:
+    post:
+      tags:
+        - Clientes
+      description: Atualiza dados do cliente correspondente ao parâmetro.
+      operationId: atualizaDadosConta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/DadosContaDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/completaDadosConta:
+    post:
+      tags:
+        - Clientes
+      description: Atualiza dados do cliente correspondente ao parâmetro.
+      operationId: completaDadosConta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/DadosContaDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/carregarCarteiraConsultas/{idCliente}:
+    get:
+      tags:
+        - Clientes
+      description: Retorna credito do cliente correspondente ao parâmetro.
+      operationId: carregarCarteiraConsultas      
+      security:
+        - APIKey: []
+      parameters:
+        - name: idCliente
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses: 
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/CarteiraConsultaDTO'
+  /cliente/carregarCarteiraConsultas:
+    get:
+      tags:
+        - Clientes
+      description: Retorna credito do cliente logado.
+      operationId: carregarCarteiraConsultas_1
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                    $ref: '#/components/schemas/CarteiraConsultaDTO'
+  /cliente/cadastrarClienteSimples:
+    post:
+      tags:
+        - Clientes
+      description: Cadastro simplificado do cliente.
+      operationId: criarClienteSimples
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CadastrarClienteDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/salvarFeedbackConsulta:
+    post:
+      tags:
+        - Clientes
+      description: Salva o feedback do cliente.
+      operationId: salvarFeedbackConsulta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  mensagem:
+                    type: string
+                  aprovado:
+                    type: string
+      responses: 
+        '200':
+          description: Sucesso
+        '500':
+          description: Unexpected error.
+  /cliente/loginSocial:
+    post:
+      tags:
+        - Clientes
+      description: Realiza  login através das redes sociais.
+      operationId: loginClienteRedeSocial
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/LoginRedeSocialDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/revalidarTokenUsuario:
+    post:
+      tags:
+        - Clientes
+      description: Revalida o token do cliente.
+      operationId: revalidarTokenUsuario
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  tokenJwtStrNovo:
+                    type: string
+        '401':
+          description: Unauthorized.
+  /cliente/atualizaDadosPessoais:
+    post:
+      tags:
+        - Clientes
+      description: Atualiza os dados pessoais do cliente.
+      operationId: atualizaDadosPessoais
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/DadosPessoaisDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/cadastrarClienteCompleto:
+    post:
+      tags:
+        - Clientes
+      description: Cadastro completo do cliente.
+      operationId: criarClienteCompleto
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CadastrarClienteDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  strJwt:
+                    type: string
+        '500':
+          description: Unexpected error.
+  /cliente/listarNotificacoesCliente:
+    post:
+      tags:
+        - Clientes
+      description: Lista todas as notificações por cliente.
+      operationId: listarNotificacoesCliente
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificacoesCliente'
+        '500':
+          description: Unexpected error.
+  /cliente/carregarValorCarteira:
+    get:
+      tags:
+        - Clientes
+      description: Retorna o valor de crédito do cliente.
+      operationId: carregarValorCarteira
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Cliente'
+  /cliente/cadastrarNovaSenha:
+    post:
+      tags:
+        - Clientes
+      description: Cadastra uma nova senha.
+      operationId: cadastrarNovaSenha
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CadastrarNovaSenhaDTO'
+      responses:
+        '200':
+          description: Nova Senha cadastrada com sucesso.
+                
+        '500':
+          description: Unexpected error.
+  /cliente/relatorio:
+    post:
+      tags:
+        - Clientes
+      description: Retorna uma lista de cadastro de clientes.
+      operationId: listarDadosCadastrais
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CadastrarClienteDTO'
+  /cliente/qtdConsultasDisponiveis:
+    post:
+      tags:
+        - Clientes
+      description: Retorna uma lista contendo credito disponível para consultas.
+      operationId: getConsultasDisponiveis
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QtdConsultaDisponivelDTO'
+        '500':
+          description: Unexpected error.
+  /cliente/historicoConsultas:
+    post:
+      tags:
+        - Clientes
+      description: Retorna uma lista contendo histórico das consultas.
+      operationId: getHistoricoConsultas
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosConsulta'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricoConsultaDTO'
+  /cliente/alteraStatus/{id}:
+    get:
+      tags:
+        - Clientes
+      description: Altera o estado do usuário(ativo, desativado).
+      operationId: alteraStatusCliente
+      security:
+        - APIKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+  /cliente/salvarConsultasDisponiveis:
+    post:
+      tags:
+        - Clientes 
+      description: Salva a quantidade de consultas disponíveis.
+      operationId: salvarConsultasDisponiveis
+      security:
+        - APIKey: []
+      parameters:
+        - name: idClient
+          in: query
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/QtdConsultaDisponivelDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QtdConsultaDisponivelDTO'
+  /cliente/confirmacaoExclusao/{token}:
+    get:
+      tags:
+        - Clientes
+      description: Confirma se cliente foi excluído.
+      operationId: confirmacaoExclusaoCliente
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+  /cliente/listarHistoricoCompra:
+    get:
+      tags:
+        - Clientes
+      description: Lista o histórico do Estado da Compra.
+      operationId: listarHistoricoCompra
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricoStatusCompraDTO'
+  /cliente/exclusao:
+    post:
+      tags:
+        - Clientes
+      operationId: solicitarExclusaoCliente
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/SolicitacaoExclusaoDTO'
+      responses:
+        default:
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+  /cliente/carregarDadosCliente/{id}:
+    get:
+      tags:
+        - Clientes
+      description: Retorna os dados de um cliente correspondente ao parâmetro.
+      operationId: carregarDadosCliente
+      security:
+        - APIKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                  $ref: '#/components/schemas/UsuarioDto'
+  /compra/lista:
+    post:
+      tags:
+        - Compras
+      description: Retorna uma lista de compras correspondente ao parâmetro.
+      operationId: getListaCompras
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltroCompras'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CompraDto'
+  /compra/cancelarCompra:
+    post:
+      tags:
+        - Compras
+      description: Cancela a compra correspondente ao parâmetro.
+      operationId: cancelarCompra
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/RefoundDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseXmlPagSeguroDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseXmlPagSeguroDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseXmlPagSeguroDto'
+  /compra/estornoCompra:
+    post:
+      tags:
+        - Compras
+      description: Estorna a compra correspondente ao parâmetro.
+      operationId: estornoCompra
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/RefoundDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseXmlPagSeguroDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseXmlPagSeguroDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseXmlPagSeguroDto'
+  /compra/relatorio:
+    post:
+      tags:
+        - Compras
+      description: Retorna um relatorio das compras correspondente ao parâmetro.
+      operationId: getListaComprasRelatorio
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltroCompras'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CompraDto'
+  /consultaAutoRisco/leilao:
+    post:
+      tags:
+        - Consultas
+      description: Retorna os resultados da consulta de auto risco leilão correspondente ao parâmetro.
+      operationId: realizaConsultaLeilao
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/ConsultaAutoRiscoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ResponseAutoRiscoLeilao'
+        '500':
+          description: Unexpected error.
+  /consultaAutoRisco/leilaoImg:
+    post:
+      tags:
+        - Consultas
+      description: Retorna as imagens da consulta de auto risco leilão correspondente ao parâmetro.
+      operationId: realizaConsultaLeilaoImg
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/ConsultaSinistroDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/AutoRiscoLeilaoImg'
+        '500':
+          description: Unexpected error.
+  /consultaAutoRisco/sinistro:
+    post:
+      tags:
+        - Consultas
+      description: Retorna os resultados da consulta de auto risco sinistro correspondente ao parâmetro.
+      operationId: realizaConsultaSinistro
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/ConsultaSinistroDto'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AutoRiscoSinistro'
+        '500':
+          description: Unexpected error.
+  /consultar/valores:
+    get:
+      tags:
+        - Consultas
+      description:  Retorna a lista discriminado as consultas e valores.
+      operationId: valores
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/ConsultaTelaDto'
+  /consultar/realizarConsulta:
+    post:
+      tags:
+        - Consultas
+      description: Retorna os resultados da consulta correspondente ao parâmetro.
+      operationId: realizaConsulta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: object
+              properties:
+                consultaSelecionada:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                placa:
+                  type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsultaVeiculoDto'
+        '500':
+          description: Unexpected error.
+  /consultar/valoresLogado:
+    get:
+      tags:
+        - Consultas
+      description: Retorna a lista discriminado as consultas e valores.
+      operationId: valoresLogado
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsultaTelaDto'
+  /consultar/carregarConsulta/{tokenConsulta}:
+    get:
+      tags:
+        - Consultas
+      description: Retorna o resultado da consulta correspondente ao parâmetro.
+      operationId: dadosConsultaVeiculo
+      parameters:
+        - name: tokenConsulta
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsultaVeiculoDto'
+        '500':
+          description: Unexpected error.
+  /consultar/recarregarConsulta/{tokenConsulta}:
+    get:
+      tags:
+        - Consultas
+      description: Refaz a consulta correspondente ao parâmetro(quando houver algum erro).
+      operationId: recarregarConsulta
+      parameters:
+        - name: tokenConsulta
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsultaVeiculoDto'
+        '500':
+          description: Unexpected error.
+  /consultar/historicoConsultaCliente:
+    post:
+      tags:
+        - Consultas
+      description:  Retorna o histórico da consulta do veiculo.
+      operationId: historicoConsultasCliente
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosConsulta'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsultaVeiculoDto'
+  /consultar/relatorio:
+    post:
+      tags:
+        - Consultas
+      description:  Retorna um relatorio das consultas do cliente.
+      operationId: getListaComprasRelatorio_1
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosConsulta'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricoConsultaDTO'
+  /consultar/historicoConsulta:
+    post:
+      tags:
+        - Consultas
+      description:  Retorna o histórico das consultas do cliente.
+      operationId: historicoConsulta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltrosConsulta'
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConsultaVeiculoDto'
+  /consultar/dadosVeiculo/{origem}:
+    post:
+      tags:
+        - Consultas
+      description:  Retorna os dados para o Captcha.
+      operationId: pegarDadosVeiculoCaptcha
+      parameters:
+        - name: origem
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - WEB
+              - APP
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                placa:
+                  type: string
+
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VeiculoVisualizarDTO'
+  /consultar/compostas:
+    get:
+      tags:
+        - Consultas
+      description:  Retorna a lista das consultas compostas.
+      operationId: getListaCompostas
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Composta'
+
+  /consultar/dadosVeiculo/{placa}:
+    get:
+      tags:
+        - Consultas
+      description: Retorna os dados do veiculo correspondente ao parâmetro.
+      operationId: pegarDadosVeiculoTelaInicial
+      parameters:
+        - name: placa
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VeiculoVisualizarDTO'
+  /dadosCartao/carregarCartao/{tokenCartao}:
+    get:
+      tags:
+        - Dados Cartao
+      description: Retorna o cartão de crédito correspondente ao parâmetro.
+      operationId: loginCliente_1
+      security:
+        - APIKey: []
+      parameters:
+        - name: tokenCartao
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CartaoCreditoDto'
+  /dadosCartao/lista:
+    get:
+      tags:
+        - Dados Cartao
+      description: Retorna todos os cartões de crédito do usuário logado.
+      operationId: loginCliente_2
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DadosCartao'
+  /dadosCartao/excluirCartao/{tokenCartao}:
+    get:
+      tags:
+        - Dados Cartao
+      description: Remove o cartão de crédito correspondente ao parâmetro.
+      operationId: excluirCartao
+      security:
+        - APIKey: []
+      parameters:
+        - name: tokenCartao
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+        '500':
+          description: Unexpected error.
+  /dadosCartao/obterBandeiraCartao:
+    get:
+      tags:
+        - Dados Cartao
+      description: Retorna a bandeira do cartão de crédito correspondente ao parâmetro.
+      operationId: obterBandeiraCartao
+      parameters:
+        - name: creditCard
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/BandeiraCartaoDTO'
+        '500':
+          description: Unexpected error.
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: string
+                example: UNKNOWN
+  /faq/buscarFaq:
+    get:
+      tags:
+        - FAQ
+      description: Retorna todas as correspondências encontradas.
+      operationId: buscarFaq
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+        '500':
+          description: Unexpected error.
+  /faq/buscarFaqPorTopicos:
+    get:
+      tags:
+        - FAQ
+      description: Retorna as correspondências encontradas por tópicos.
+      operationId: buscarFaqPorTopicos
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+        '500':
+          description: Unexpected error.
+  /health/ready:
+    get:
+      tags:
+        - Health
+      description: >-
+        Verifica-se a aplicação esta online e fazendo conexões com banco de
+        dados.
+      operationId: readinessDatabase
+      responses:
+        '200':
+          description: default response
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  checkName:
+                    type: string
+                  mensagem:
+                    type: string
+        '503':
+          description: Service Unavailable.
+  /nfe/alterastatusnfe:
+    post:
+      tags:
+        - NF-e
+      description: Realiza a atualização nota fisal eletrônica.
+      operationId: alteraStatusNfe
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/NFeData'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+        '500':
+          description: Unexpected error.
+  /nfe/cancelanfe/{idCompra}:
+    get:
+      tags:
+        - NF-e
+      description: Realiza o cancelamento nota fisal eletrônica.
+      operationId: cancelaNfe
+      security:
+        - APIKey: []
+      parameters:
+        - name: idCompra
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+        '500':
+          description: Unexpected error.
+  /pagamento/pagarApp/CARTAO:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando cartão.(Origem da Compra WEB)
+      operationId: pagarAppCARTAO
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraCartaoCreditoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/existeCupom/{codigo}:
+    get:
+      tags:
+        - Pagamentos
+      description: verifica se o cupom existe.
+      operationId: existeCupom
+      parameters:
+        - name: codigo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: query
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+  /pagamento/getCupom/{idCupom}:
+    get:
+      tags:
+        - Pagamentos
+      description: Retorna o cupom correspondente ao parâmetro.
+      operationId: getCupom
+      parameters:
+        - name: idCupom
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/CupomDescontoDto'
+  /pagamento/pagarApp/cartao:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando cartão.(Origem da Compra WEB)
+      operationId: pagarAppCartao
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraCartaoCreditoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/pagarApp/BOLETO:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando boleto.(Origem da Compra WEB)
+      operationId: pagarAppBOLETO
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraClienteDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/pagarApp/boleto:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando boleto.(Origem da Compra WEB)
+      operationId: pagarAppBoleto
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraClienteDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/pagarAndroid/CARTAO:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando cartão.(Origem da Compra APP)
+      operationId: pagarAndroidCARTAO
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraCartaoCreditoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/listaCalculoConsulta:
+    post:
+      tags:
+        - Pagamentos
+      description: Lista os valores e informaçoes da compra, caso o usuario ultilize um cupom invalido é mostrado uma mensagem informativa 'Não é permitido utilizar Cupom Desconto junto com Saldo'.
+      operationId: listaCalculoConsulta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: object
+              properties:
+                usuarioDto:
+                  $ref: '#/components/schemas/UsuarioDto'
+                compraDto:
+                  $ref: '#/components/schemas/CompraClienteDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RetornoValorCompraDto'
+  /pagamento/carregarCupomPagamento:
+    get:
+      tags:
+        - Pagamentos
+      description: Retorna uma lista contendo todos os cupons de desconto.
+      operationId: carregarCupomPagamento
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CupomDesconto'
+  /pagamento/novoCupomPagamento:
+    post:
+      tags:
+        - Pagamentos
+      description:  Cria um cupons de desconto.
+      operationId: novoCupomPagamento
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CupomDescontoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/RetornoWb'
+  /pagamento/listaCupomDesconto:
+    post:
+      tags:
+        - Pagamentos
+      description: Retorna uma lista de cupons de desconto correspondente ao parâmetro.
+      operationId: listaCupomDesconto
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/FiltroCupomDesconto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/CupomDescontoDto'
+  /pagamento/pagarAndroid/BOLETO:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando boleto.(Origem da Compra APP)
+      operationId: pagarAndroidBOLETO
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraClienteDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/calcularValorConsulta:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o cálculo total da compra.
+      operationId: calcularValorConsulta
+      security:
+        - APIKey: []
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraCartaoCreditoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoValorCompraDto'
+  /pagamento/pagarAndroid/boleto:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando boleto.(Origem da Compra APP)
+      operationId: pagarAndroidBoleto
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraClienteDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/pagarAndroid/cartao:
+    post:
+      tags:
+        - Pagamentos
+      description: Realiza o pagamento usando cartão.(Origem da Compra APP)
+      operationId: pagarAndroidCartao
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CompraCartaoCreditoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoCompraDto'
+  /pagamento/validaCupomPagamento:
+    get:
+      tags:
+        - Pagamentos
+      description: Valida se um cupom exite.
+      operationId: validaCupomPagamento
+      security:
+        - APIKey: []
+      parameters:
+        - name: nomeCupom
+          in: query
+          schema:
+            type: string
+        - name: consultas
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/SituacaoCupom'
+  /pagamento/editarCupomPagamento:
+    post:
+      tags:
+        - Pagamentos
+      description: Atualiza um cupom.
+      operationId: editarCupomPagamento
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/CupomDescontoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+  /respostaIugu/notificacaoIugu:
+    post:
+      tags:
+        - Respostas
+      description: Recebe a resposta da Iugu referente ao estado do pagamento.
+      operationId: notificacaoIugu
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                data[id]:
+                  type: string
+                data[status]:
+                  type: string
+                data[account_id]:
+                  type: string
+                data[payment_method]:
+                  type: string
+      responses:
+        default:
+          description: default response
+          content:
+            application/json; charset=UTF-8: {}
+  /respostaPagSeguro/notificacaoPagSeguro:
+    post:
+      tags:
+        - Respostas
+      description: Recebe a resposta da PagSeguro referente ao estado do pagamento.
+      operationId: notificacaoPagSeguroPosTransacao
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+  /respostaPagSeguro/urlNotificacaoPagSeguro:
+    post:
+      tags:
+        - Respostas
+      description: Recebe a resposta da PagSeguro referente ao estado do pagamento.
+      operationId: notificacaoPagSeguro
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: OK
+  /relatorioConsulta/carregarInsumoConsulta/{tokenConsulta}:
+    get:
+      tags:
+        - Relatorios
+      description: Retorna uma lista dos insumos(conjunto de consulta) que forma a consulta do cliente.
+      operationId: dadosConsultaVeiculo_1
+      security:
+        - APIKey: []
+      parameters:
+        - name: tokenConsulta
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InsumoConsultaHistoricoDto'
+  /suporte/salvarEmailSuporte:
+    post:
+      tags:
+        - Suporte
+      description: Salva a mensagem enviada para o suporte.
+      operationId: enviarEmailSuporte
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/EmailSuporteAppDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/RetornoWb'
+        '500':
+          description: Unexpected error.
+  /carregarQrCode/{token}:
+    get:
+      tags:
+        - Carregar
+      description: Retorna o QrcCode correspondente ao parâmetro.
+      operationId: carregarQrCode
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: default response
+          content:
+            image/png:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+  /carregarMarca/{marca}.png:
+    get:
+      tags:
+        - Carregar
+      description: Retorna Marca correspondente ao parâmetro.
+      operationId: buscarMarca
+      parameters:
+        - name: marca
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: default response
+          content:
+            image/png:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+  /util/listaEmailNewsletterCancelados:
+    post:
+      tags:
+        - Util
+      description: Retorna uma lista de E-mail News Letter cancelados.
+      operationId: listaEmailNewsletterCancelamento
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NewsletterCancelamento'
+        '500':
+          description: Unexpected error.
+  /util/cadastrarEmailNewsletter:
+    post:
+      tags:
+        - Util
+      description: Cadastra um E-mail News Letter.
+      operationId: cadastrarEmailNewsletter
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                example: "E-mail salvo com sucesso"
+        '500':
+          description: Unexpected error.
+  /util/carcelarNewsletter:
+    post:
+      tags:
+        - Util
+      description: Cancela um E-mail News Letter.
+      operationId: cancelarNewsletter
+      requestBody:
+        content:
+          application/json; charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/NewsletterCancelamentoDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: object
+                example: ""
+  /carregarBandeiraCartao/{bandeira}.png:
+    get:
+      tags:
+        - Carregar
+      description: Retorna Bandeira do Cartão correspondente ao parâmetro.
+      operationId: buscarBandeiraCartao
+      parameters:
+        - name: bandeira
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: default response
+          content:
+            image/png:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+  /util/listaEmailNewsletter:
+    post:
+      tags:
+        - Util
+      operationId: listaEmailNewsletter
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Newsletter'
+        '500':
+          description: Unexpected error.
+  /email-files/{img}.png:
+    get:
+      tags:
+        - Email
+      description: Retorna imagem  correspondente ao parâmetro.
+      operationId: buscarImgEmailTemplate
+      parameters:
+        - name: img
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: default response
+          content:
+            image/png:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: byte
+  /documentosAceite/{documento}:
+    get:
+      tags:
+        - Documentos
+      description: Retorna documento correspondente ao parâmetro.
+      operationId: getVersaoDocumentoAtual
+      parameters:
+        - name: documento
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - TERMO_USO
+              - POLITICA_PRIVACIDADE
+        - name: v
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VersaoDocumento'
+        '500':
+          description: Unexpected error.
+  /documentosAceite:
+    get:
+      tags:
+        - Documentos
+      description: Retorna os documentos, Termo de Uso e Politica Privacidade.
+      operationId: getVersaoDocumentosAtuais
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VersaoDocumento'
+        '500':
+          description: Unexpected error.
+  /documentosAceite/relatorioAceiteUsuarios:
+    get:
+      tags:
+        - Documentos
+      description: Retorna uma lista de usuários que aceitaram o Termo de Uso e Politica Privacidade.
+      operationId: getTodosAceitesUsuarios
+      security:
+        - APIKey: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=UTF-8:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/VersaoDocumentoUsuarioDTO'
+        '500':
+          description: Unexpected error.
+components:
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    LoginDTO:
+      required:
+        - email
+        - senha
+      type: object
+      properties:
+        email:
+          type: string
+        senha:
+          type: string
+    RecuperarSenhaDTO:
+      type: object
+      properties:
+        email:
+          type: string
+    FiltrosDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        documento:
+          type: string
+        placa:
+          type: string
+        chassi:
+          type: string
+        dataCadastroIni:
+          type: string
+          format: date-time
+        dataCadastroFim:
+          type: string
+          format: date-time
+        pagina:
+          type: integer
+          format: int32
+    RetornoWb:
+      type: object
+      properties:
+        codeError:
+          type: string
+          enum:
+            - ERROR_GENERIC
+            - EMPTY_VEHICLE
+            - UNAUTHORIZED
+            - FORBIDDEN
+            - OBJECT_NOT_FOUND
+            - METHOD_NOT_FOUND
+            - EMAIL_NOT_FOUND
+            - EMAIL_DUPLICATE
+            - EMAIL_OR_PASSWORD_INCORRECT
+            - CARD_NUMBER_INVALID
+            - INVALID_TOKEN
+            - EMPTY_DOC_NUMBER
+            - EMPTY_NAME_USER
+            - INVALID_DOC_NUMBER
+            - INVALID_ADDRESS
+            - CREDIT_UNAVAILABLE
+            - INVALID_CAPTCHA_TOKEN
+            - DISCOUNT_BUY
+            - FORM_VALIDATION
+            - PAYMENT_VALIDATION
+            - DOC_NUMBER_DUPLICATE
+            - USER_NOT_FOUND
+            - INVALID_TOKEN_SOCIAL_NETWORK
+            - INACTIVE_CLIENTE
+            - GERACAO_NFE_CONEXAO
+            - GERACAO_NFE_PARSE_CLIENTE
+            - GERACAO_NFE_VALOR
+            - PAGSEGURO_ERROR
+        msgError:
+          type: string
+        data:
+          type: object
+    ClienteDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        documento:
+          type: string
+        razaoSocial:
+          type: string
+        nome:
+          type: string
+        telefone:
+          type: string
+        credito:
+          type: number
+          format: double
+        tipoPessoa:
+          type: string
+          enum:
+            - FISICA
+            - JURIDICA
+        tokenIndicacao:
+          type: string
+        dataCadastro:
+          type: string
+          format: date-time
+        enderecoCliente:
+          $ref: '#/components/schemas/EnderecoClienteDto'
+    EnderecoClienteDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        endereco:
+          type: string
+        complemento:
+          type: string
+        numero:
+          type: integer
+          format: int32
+        bairro:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        cep:
+          type: string
+    EnderecoCliente:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        endereco:
+          type: string
+        complemento:
+          type: string
+        numero:
+          type: integer
+          format: int32
+        bairro:
+          type: string
+        cidade:
+          type: string
+        estado:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        cep:
+          type: string
+    DadosPessoaisDTO:
+      type: object
+      properties:
+        cep:
+          type: string
+        telefone:
+          type: string
+        numero:
+          type: integer
+        rua:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: string
+        uf:
+          type: string
+        senha:
+          type: string
+    UsuarioDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+          enum:
+            - ATIVO
+            - INATIVO
+            - EXCLUIDO
+        tokenFacebook:
+          type: string
+        tokenGoogle:
+          type: string
+        usuarioFacebook:
+          type: boolean
+        usuarioGoogle:
+          type: boolean
+        tipoCadastro:
+          type: string
+          enum:
+            - COMPLETO
+            - SIMPLES
+            - SIMPLESATUALIZADO
+        dataNascimento:
+          type: string
+          format: date-time
+        cliente:
+          $ref: '#/components/schemas/ClienteDto'
+    CadastrarClienteDTO:
+      type: object
+      properties:
+        tipoPessoa:
+          type: string
+        razaoSocial:
+          type: string
+        nomeFantasia:
+          type: string
+        cnpj:
+          type: string
+        nome:
+          type: string
+        cpf:
+          type: string
+        telefone:
+          type: string
+        dataNascimento:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        cep:
+          type: string
+        numero:
+          type: integer
+          format: int32
+        endereco:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: string
+        uf:
+          type: string
+        identificacaoParceiro:
+          type: string
+        origemCadastro:
+          type: string
+        tipoCadastro:
+          type: string
+        codigoIndicacao:
+          type: string
+        dataCadastro:
+          type: string
+        newsletter:
+          type: boolean
+    LoginRedeSocialDTO:
+      type: object
+      properties:
+        redeSocial:
+          type: string
+          enum:
+            - GOOGLE
+            - FACEBOOK
+        token:
+          type: string
+        origemCadastro:
+          type: string
+          enum:
+            - WEB
+            - APP
+    CadastrarNovaSenhaDTO:
+      type: object
+      properties:
+        token:
+          type: string
+        novaSenha:
+          type: string
+    FiltrosConsulta:
+      type: object
+      properties:
+        idClient:
+          type: integer
+          format: int64
+        documento:
+          type: string
+        plate:
+          type: string
+        endDate:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          format: date-time
+        page:
+          type: integer
+          format: int32
+        email:
+          type: string
+    QtdConsultaDisponivelDTO:
+      type: object
+      properties:
+        idCreditoConsulta:
+          type: integer
+          format: int64
+        nomeConsulta:
+          type: string
+        qtdDisponivel:
+          type: integer
+          format: int32
+    SolicitacaoExclusaoDTO:
+      type: object
+      properties:
+        idCliente:
+          type: integer
+          format: int64
+        solicitante:
+          type: string
+    FiltroCompras:
+      type: object
+      properties:
+        idCliente:
+          type: integer
+          format: int64
+        documento:
+          type: string
+        email:
+          type: string
+        dataIni:
+          type: string
+          format: date-time
+        dataFim:
+          type: string
+          format: date-time
+        idComposta:
+          type: integer
+          format: int64
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamento'
+        situacaoPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        codigoCupomDesconto:
+          type: string
+        pagina:
+          type: integer
+          format: int32
+    RefoundDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        refoundValue:
+          type: string
+    AutoRiscoDecodificador:
+      type: object
+      properties:
+        dsMotor:
+          type: string
+        nuCdCategoria:
+          type: integer
+          format: int64
+        nuCdRetorno:
+          type: integer
+          format: int64
+        dsCategoria:
+          type: string
+        dsModelo:
+          type: string
+        dsOrigem:
+          type: string
+        dsChassi:
+          type: string
+        dsRegiao:
+          type: string
+        dsRetorno:
+          type: string
+        dsVersao:
+          type: string
+        dsPais:
+          type: string
+        dsCombustivel:
+          type: string
+        nuAnoModelo:
+          type: integer
+          format: int64
+        precificadorI:
+          type: array
+          items:
+            $ref: '#/components/schemas/Precificador'
+        dsMarca:
+          type: string
+        dsLocalFabricacao:
+          type: string
+        dsTipoCarroceria:
+          type: string
+        precificadorII:
+          type: array
+          items:
+            $ref: '#/components/schemas/Precificador'
+        nuCdTipoCarroceria:
+          type: integer
+          format: int64
+        dsChassiTratado:
+          type: string
+        nuCdCombustivel:
+          type: integer
+          format: int64
+    Precificador:
+      type: object
+      properties:
+        dsModelo:
+          type: string
+        dsVersao:
+          type: string
+        dsCombustivel:
+          type: string
+        dsMarca:
+          type: string
+        dsCodigo:
+          type: string
+        nuValor:
+          type: integer
+          format: int64
+    ResponseAutoRiscoLeilao:
+      type: object
+      properties:
+        leilao:
+          type: object
+        decodificador:
+          $ref: '#/components/schemas/AutoRiscoDecodificador'
+        message:
+          type: string
+    ConsultaAutoRiscoDto:
+      type: object
+      properties:
+        placa:
+          type: string
+        chassi:
+          type: string
+    AutoRiscoLeilaoImg:
+      type: object
+      properties:
+        imagensLeilao:
+          $ref: '#/components/schemas/ImagemLeilao'
+    Imagem:
+      type: object
+      properties:
+        url:
+          type: string
+    ImagemLeilao:
+      type: object
+      properties:
+        placa:
+          type: string
+        chassi:
+          type: string
+        leiloes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Leilao'
+    Leilao:
+      type: object
+      properties:
+        numeroLeilao:
+          type: integer
+          format: int64
+        imagens:
+          type: array
+          items:
+            $ref: '#/components/schemas/Imagem'
+    VersaoDocumento:
+      type: object
+      properties:
+        id:
+          type: integer
+        dataCriacao:
+          type: string
+          format: date
+        urlDocumento:
+          type: string
+        TipoDocumentoAceiteEnum:
+          $ref: '#/components/schemas/TipoDocumentoAceiteEnum'
+        emailNotificacao:
+          type: boolean
+    TipoDocumentoAceiteEnum:
+      type: string
+      enum:
+        - TERMO_USO
+        - POLITICA_PRIVACIDADE
+    VersaoDocumentoUsuarioDTO:    
+      type: object
+      properties:
+        VersaoDocumento:
+          $ref: '#/components/schemas/VersaoDocumento'
+        usuario:
+          $ref: '#/components/schemas/UsuarioDto'
+        ipUsuario:
+          type: string
+        dataAceite:
+          type: string
+          format: date
+    ConsultaSinistroDto:
+      required:
+        - chassi
+        - placa
+      type: object
+      properties:
+        placa:
+          type: string
+        chassi:
+          type: string
+    AutoRiscoSinistro:
+      required:
+        - chassi
+        - placa
+      type: object
+      properties:
+        placa:
+          type: string
+        chassi:
+          type: string
+        indice:
+          type: integer
+          format: int64
+        descricao:
+          type: string
+        observacao:
+          type: string
+    CartaoCreditoDto:
+      required:
+        - anoValidade
+        - cpf
+        - cvv
+        - dataNascimento
+        - mesValidade
+        - nome
+        - numero
+      type: object
+      properties:
+        bandeira:
+          type: string
+        numero:
+          type: string
+        nome:
+          type: string
+        cvv:
+          type: string
+        cpf:
+          type: string
+        mesValidade:
+          type: string
+        anoValidade:
+          type: string
+        dataNascimento:
+          type: string
+          format: date-time
+        imagemBandeira:
+          type: string
+    CompraCartaoCreditoDto:
+      required:
+        - armazenarCartao
+        - cupom
+        - listaProduto
+        - qtdParcelas
+        - usarCreditoCarteira
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cupom:
+          type: string
+        usarCreditoCarteira:
+          type: boolean
+        placa:
+          type: string
+        qtdParcelas:
+          minimum: 1
+          type: integer
+          format: int32
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamento'
+        listaProduto:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/CompraProdutoDto'
+        cartaoCreditoDto:
+          $ref: '#/components/schemas/CartaoCreditoDto'
+        tokenCartao:
+          type: string
+        armazenarCartao:
+          type: boolean
+    CompraProdutoDto:
+      required:
+        - idProduto
+        - quantidade
+      type: object
+      properties:
+        idProduto:
+          minimum: 1
+          type: integer
+          format: int64
+        quantidade:
+          minimum: 1
+          type: integer
+          format: int32
+    CompraClienteDto:
+      required:
+        - cupom
+        - listaProduto
+        - qtdParcelas
+        - usarCreditoCarteira
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cupom:
+          type: string
+        usarCreditoCarteira:
+          type: boolean
+        placa:
+          type: string
+        qtdParcelas:
+          minimum: 1
+          type: integer
+          format: int32
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamento'
+        listaProduto:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/CompraProdutoDto'
+    CompostaDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+    NFeData:
+      type: object
+      properties:
+        dataTransacao:
+          type: string
+        nfeId:
+          type: string
+        nfeDataCompetencia:
+          type: string
+        nfeLinkPdf:
+          type: string
+        nfeLinkXml:
+          type: string
+        nfeNumero:
+          type: string
+        motivoStatus:
+          type: string
+        status:
+          type: string
+    EmailSuporteAppDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        nome:
+          type: string
+        mensagem:
+          type: string
+    CupomDesconto:
+      type: object
+      properties:
+        id:
+          type: integer
+        codigo:
+          type: string
+        dataInicio:
+          type: string
+          format: date-time
+        tipoCupomDesconto:
+          type: string
+          enum:
+            - VALOR
+            - PORCENTO
+        valorDesconto:
+          minimum: 0.01
+          exclusiveMinimum: false
+          type: number
+          format: double
+        dataFim:
+          type: string
+          format: date-time
+        quantidadeVenda:
+          type: integer
+          format: int32
+        ativo:
+          type: boolean
+        Compra:
+          type: array
+          items:
+            $ref: '#/components/schemas/Compra'
+        DescontoComposta:
+          type: array
+          items:
+            $ref: '#/components/schemas/DescontoComposta'
+        UsuarioCliente:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsuarioCliente'
+        Composta:
+          type: array
+          items:
+            $ref: '#/components/schemas/Composta'
+        unicoPorUsuario:
+          type: boolean
+        relacionadoConsultas:
+          type: boolean
+    UsuarioCliente:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        senha:
+          type: string
+        documento:
+          type: string
+        status:
+            $ref: '#/components/schemas/StatusUsuario'
+        tokenFacebook:
+          type: string
+        tokenGoogle:
+          type: string
+        tokenAcesso:
+          type: string
+        salt:
+          type: string
+        dataNascimento:
+          type: string
+          format: date
+        cliente:
+            $ref: '#/components/schemas/Cliente'
+        listaConsultaVeiculo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsultaVeiculo'
+        tokenRecuperacaoSenha:
+          type: string
+    Cliente:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        documento:
+          type: string
+        razaoSocial:
+          type: string
+        nome:
+          type: string
+        telefone:
+          type: string
+        identificadorParceiro:
+          type: string
+        tokenIndicacao:
+          type: string
+        tokenRetribuirIndicacao:
+          type: string
+        credito:
+          type: integer
+        tipoCompra:
+            $ref: '#/components/schemas/TipoCompra'
+        tipoCadastro:
+            $ref: '#/components/schemas/TipoCadastro'
+        tipoPessoa:
+            $ref: '#/components/schemas/TipoPessoa'
+        origemCadastro:
+            $ref: '#/components/schemas/OrigemCadastro'
+        dataCadastro:
+          type: string
+          format: date
+        enderecoCliente:
+            $ref: '#/components/schemas/EnderecoCliente'
+        composicaoConsultaComposta:
+            $ref: '#/components/schemas/ComposicaoConsultaComposta'
+        listaCreditoConsulta:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditoConsulta'
+        listaUsuarioCliente:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsuarioCliente'
+    ConsultaVeiculo:
+      type: object
+      properties:
+        id:
+          type: integer
+        dataConsulta:
+          type: string
+          format: date
+        placaEntrada:
+          type: string
+        tokenConsulta:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusUsuario'
+        usuarioCliente:
+            $ref: '#/components/schemas/UsuarioCliente'
+        resumoVeiculo:
+            $ref: '#/components/schemas/ResumoVeiculo'
+        composta:
+            $ref: '#/components/schemas/Composta'
+        listaConsultaInterna:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsultaInterna'
+        consultaFinalizada:
+          type: boolean
+        consultaErro:
+          type: boolean
+    TipoCompra:
+      type: string
+      enum:
+        - PRE_PAGO
+        - POS_PAGO
+    TipoCadastro:
+      type: string
+      enum:
+        - COMPLETO
+        - SIMPLES
+        - SIMPLESATUALIZADO
+    TipoPessoa:
+      type: string
+      enum:
+        - FISICA
+        - JURIDICA
+    StatusUsuario:
+      type: string
+      enum:
+        - ATIVO
+        - INATIVO
+        - EXCLUIDO
+    OrigemCadastro:
+      type: string
+      enum:
+        - WEB
+        - APP
+    OrigemCompra:
+      type: string
+      enum:
+        - WEB
+        - APP
+    EnumCor:
+      type: string
+      enum:
+        - OUTROS_DESCONHECIDO
+        - AMARELA
+        - AZUL
+        - BEGE
+        - BRANCA
+        - CINZA
+        - DOURADA
+        - GRENA
+        - LARANJA
+        - MARROM
+        - PRATA
+        - PRETA
+        - ROSA
+        - ROXA
+        - VERDE
+        - VERMELHA
+        - FANTASIA
+    EnumCombustivel:
+      type: string
+      enum:
+        - INDETERMINADO
+        - ALCOOL
+        - GASOLINA
+        - DIESEL
+        - GASOGENIO
+        - GAS_METANO
+        - ELETRICO_FONTE_INTERNA
+        - ELETRICO_FONTE_EXTERNA
+        - GASOLINA_GAS_NATURAL_COMBUSTIVEL
+        - ALCOOL_GAS_NATURAL_COMBUSTIVEL
+        - DIESEL_GAS_NATURAL_COMBUSTIVEL
+        - VIDE_CAMPO_OBSERVACAO
+        - ALCOOL_GAS_NATURAL_VEICULAR
+        - GASOLINA_GAS_NATURAL_VEICULAR
+        - DIESEL_GAS_NATURAL_VEICULAR
+        - GAS_NATURAL_VEICULAR
+        - ALCOOL_GASOLINA
+        - ALCOOL_GASOLINA_GAS_NATURAL_VEICULAR
+        - GASOLINA_ELETRICO
+        - GASOLINA_ALCOOL_ELETRICO
+    EnumTipoVeiculo:
+      type: string
+      enum:
+        - NAO_IDENTIFICADO
+        - BICICLETA
+        - CICLO_MOTOR
+        - MOTONETA
+        - MOTOCICLETA
+        - TRICICLO
+        - AUTOMOVEL
+        - MICRO_ONIBUS
+        - ONIBUS
+        - BONDE
+        - REBOQUE
+        - SEMI_REBOQUE
+        - CHARRETE
+        - CAMINHONETA
+        - CAMINHAO
+        - CARROCA
+        - CARRO_DE_MAO
+        - CAMINHAO_TRATOR
+        - TRATOR_DE_RODAS
+        - TRATOR_DE_ESTEIRAS
+        - TRATOR_MISTO
+        - QUADRICICLO
+        - CHASSI_PLATAFORMA
+        - CAMINHONETE
+        - SIDE_CAR
+        - UTILITARIO
+        - DESCONHECIDO
+    SituacaoConsulta:
+      type: string
+      enum:
+        - SUCCESS
+        - INFO
+        - DANGER
+        - WARNING
+    CreditoConsulta:
+      type: object
+      properties:
+        id:
+          type: integer
+        quantidade:
+          type: integer
+        composta:
+          $ref: '#/components/schemas/Composta'
+        cliente:
+          $ref: '#/components/schemas/Cliente'
+    ResumoVeiculo:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        placa:
+          type: string
+        chassi:
+          type: string
+        fotoMarca:
+          type: string
+        marca:
+          type: string
+        modelo:
+          type: string
+        municipio:
+          type: string
+        estado:
+          type: string
+        cor:
+          $ref: '#/components/schemas/EnumCor'
+        anoFabricacao:
+          type: integer
+        anoModelo:
+          type: integer
+        cilindradas:
+          type: integer
+        idade:
+          type: integer
+        km:
+          type: integer
+        combustivel:
+          $ref: '#/components/schemas/EnumCombustivel'
+        motor:
+          type: string
+        renavam:
+          type: string
+        docProprietario:
+          type: string
+        codigoFipe:
+          type: string
+        tipoVeiculo:
+          $ref: '#/components/schemas/EnumTipoVeiculo'
+        listaDetalhesResumo:
+          type: array
+          items:
+            $ref: '#/components/schemas/DetalheResumo'
+    DetalheResumo:
+      type: object
+      properties:
+        id:
+          type: integer
+        valor:
+          type: string
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/SituacaoConsulta'
+        resumoVeiculo:
+          $ref: '#/components/schemas/ResumoVeiculo'
+    Compra:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: string
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamento'
+        origemPagamento:
+          $ref: '#/components/schemas/OrigemPagamento'
+        transacao:
+          type: string
+        listaHistoricoStatusCompra:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricoStatusCompra'
+        listaHistoricoStatusNfes:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricoStatusNfes'
+        cupomDesconto:
+          $ref: '#/components/schemas/CupomDesconto'
+        detalhamentoCompra:
+          $ref: '#/components/schemas/DetalhamentoCompra'
+        detalhamentoBoleto:
+          $ref: '#/components/schemas/DetalhamentoBoleto'
+        usuarioCliente:
+          $ref: '#/components/schemas/UsuarioCliente'
+        listaItemCompra:
+          type: array
+          items:
+           $ref: '#/components/schemas/ItemCompra'
+        ultimoHistoricoCompra:
+          $ref: '#/components/schemas/UltimoHistoricoCompra'
+        compraCanceladaOuEstornada:
+          type: boolean
+        origemCompra:
+          $ref: '#/components/schemas/OrigemCompra'
+        nfeEmitida:
+          type: boolean
+    UltimoHistoricoCompra:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        situacaoPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        data:
+          type: string
+          format: date
+        compra:
+          $ref: '#/components/schemas/Compra'
+    ComposicaoConsultaComposta:
+      type: object
+      properties:
+        id:
+          type: integer
+        listaCliente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cliente'
+        listaValorComposta:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConfiguracaoComposta'
+    HistoricoStatusCompra:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        situacaoPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        data:
+          type: string
+          format: date
+        compra:
+          $ref: '#/components/schemas/Compra'
+    HistoricoStatusNfes:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        codNotaFiscal:
+          type: string
+        numeroNotaFiscal:
+          type: string
+        statusNfse:
+          $ref: '#/components/schemas/StatusNfse'
+        data:
+          type: string
+          format: date
+        compra:
+          $ref: '#/components/schemas/Compra'
+    NotificacoesCliente:
+      type: object
+      properties:
+        id:
+          type: integer
+        titulo:
+          type: string
+        mensagem:
+          type: string
+        usuarioCliente:
+          $ref: '#/components/schemas/UsuarioCliente'
+    DescontoComposta:
+      type: object
+      properties:
+        id:
+          type: integer
+        composta:
+          $ref: '#/components/schemas/Composta'
+        cupomDesconto:
+          $ref: '#/components/schemas/CupomDesconto'
+    Composta:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: integer
+        video:
+          type: integer
+        descricao:
+          type: integer
+        urlExemplo:
+          type: integer
+        mostrarDadosResumoSuperior:
+          type: integer
+        consultaPrimaria:
+          type: integer
+        lsitaConsultaDadosInsumo:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConsultaDadosInsumo'
+        listaDescontoComposta:
+          type: array
+          items:
+           $ref: '#/components/schemas/DescontoComposta'
+        listaCreditoConsulta:
+          type: array
+          items:
+           $ref: '#/components/schemas/CreditoConsulta'
+        listaConsultaVeiculo:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConsultaVeiculo'
+        listaComposicaoConsulta:
+          type: array
+          items:
+           $ref: '#/components/schemas/ComposicaoConsulta'
+        listaValorComposta:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConfiguracaoComposta'
+    ConfiguracaoComposta:
+      type: object
+      properties:
+        id:
+          type: integer
+        valorConsulta:
+          type: number
+        principal:
+          type: boolean
+        ordem:
+          type: integer
+        composicaoConsultaComposta:
+           $ref: '#/components/schemas/ComposicaoConsultaComposta'
+        composta:
+           $ref: '#/components/schemas/Composta'
+        listaItemCompra:
+          type: array
+          items:
+           $ref: '#/components/schemas/ItemCompra'
+    ItemCompra:
+      type: object
+      properties:
+        id:
+          type: integer
+        quantidade:
+          type: integer
+        valorPago:
+          type: number
+        compra:
+           $ref: '#/components/schemas/Compra'
+        configuracaoComposta:
+           $ref: '#/components/schemas/ConfiguracaoComposta'  
+    ComposicaoConsulta:
+      type: object
+      properties:
+        id:
+          type: integer
+        composta:
+           $ref: '#/components/schemas/Composta'
+        consulta:
+           $ref: '#/components/schemas/Consulta'    
+    ConsultaDadosInsumo:
+      type: object
+      properties:
+        id:
+          type: integer
+        composta:
+           $ref: '#/components/schemas/Composta'
+        dadosInsumo:
+           $ref: '#/components/schemas/DadosInsumo'
+        statusInsumo:
+           $ref: '#/components/schemas/StatusInsumo'
+        ordem:
+          type: integer
+    Consulta:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+        ignorarErro:
+          type: boolean
+        ignorarSemRegistros:
+          type: boolean
+        prioridadeConsulta:
+          type: integer
+        tipoConsulta:
+           $ref: '#/components/schemas/TipoConsulta'
+        listaComposicaoConsulta:
+          type: array
+          items:
+           $ref: '#/components/schemas/ComposicaoConsulta'
+        listaConsultaInterna:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConsultaInterna'
+    HistoricoConsultaDTO:
+      type: object
+      properties:
+        nome:
+          type: string
+        email:
+          type: string
+        documento:
+          type: string
+        uf:
+          type: string
+        cidade:
+          type: string
+        telefone:
+          type: string
+        dataNascimento:
+          type: string
+        dataCadastro:
+          type: string
+        dataTransacao:
+          type: string
+        produto:
+          type: string
+        marca:
+          type: string
+        modelo:
+          type: string
+        anoFabricacao:
+          type: integer
+        anoModelo:
+          type: integer
+    ValorCarteiraConsultaDTO:
+      type: object
+      properties:
+        credito:
+          type: number
+        carteira:
+          type: array
+          items:
+           $ref: '#/components/schemas/CarteiraConsultaDTO'
+        listaConsultaTelaDto:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConsultaTelaDto'
+        listaNotificacoesClienteDto:
+          type: array
+          items:
+           $ref: '#/components/schemas/NotificacoesClienteDTO'
+    CarteiraConsultaDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        quantidade:
+          type: integer
+        nome:
+          type: string
+    NotificacoesClienteDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        titulo:
+          type: string
+        mensagem:
+          type: string
+    VeiculoVisualizarDTO:
+      type: object
+      properties:
+        marca:
+          type: string
+        urlIconeMarca:
+          type: string
+        modelo:
+          type: string
+        cor:
+          type: string
+        placa:
+          type: string
+        chassi:
+          type: string
+        anoFabricacao:
+          type: string
+        anoModelo:
+          type: string
+        uf:
+          type: string
+        combustivel:
+          type: string
+          
+    ConsultaInterna:
+      type: object
+      properties:
+        id:
+          type: integer
+        nrTransacao:
+          type: string
+        statusRetorno:
+           $ref: '#/components/schemas/StatusRetorno'
+        consultaVeiculo:
+           $ref: '#/components/schemas/ConsultaVeiculo'
+        consulta:
+           $ref: '#/components/schemas/Consulta'
+    DadosInsumo:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        label:
+          type: string
+        description:
+          type: string
+    StatusInsumo:
+      enum:
+        - CHECKED
+        - UNCHECKED
+    DetalhamentoCompra:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: integer
+        valorCompra:
+          type: integer
+        valorJuros:
+          type: integer
+        valorDesconto:
+          type: integer
+        valorSaldo:
+          type: integer
+        valorParcela:
+          type: integer
+        valorFinal:
+          type: integer
+        quantidadeParcelas:
+          type: integer
+        placaEntrada:
+          type: integer
+    StatusNfse:
+      type: string
+      enum:
+        - AUTORIZADA
+        - CANCELADO
+        - NAO_GERADO
+        - ERRO
+        - PENDENTE
+        - AGUARDANDO_CANCELAMENTO
+        - NEGADA
+        - AGUARDANDO_AUTORIZACAO
+    CupomDescontoDto:
+      required:
+        - ativo
+        - codigo
+        - dataInicio
+        - quantidadeVenda
+        - tipoCupomDesconto
+        - valorDesconto
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        codigo:
+          type: string
+        valorDesconto:
+          minimum: 0.01
+          exclusiveMinimum: false
+          type: number
+          format: double
+        tipoCupomDesconto:
+          type: string
+          enum:
+            - VALOR
+            - PORCENTO
+        dataInicio:
+          type: string
+          format: date-time
+        dataFim:
+          type: string
+          format: date-time
+        quantidadeVenda:
+          type: integer
+          format: int32
+        ativo:
+          type: boolean
+        unicoPorUsuario:
+          type: boolean
+        relacionadoConsultas:
+          type: boolean
+        consultas:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompostaDTO'
+    FiltroCupomDesconto:
+      type: object
+      properties:
+        codigo:
+          type: string
+        tipoCupomDesconto:
+          type: string
+          enum:
+            - VALOR
+            - PORCENTO
+        dataInicio:
+          type: string
+          format: date-time
+        dataFim:
+          type: string
+          format: date-time
+        pagina:
+          type: integer
+          format: int32
+        ativo:
+          type: boolean
+    NewsletterCancelamentoDto:
+      required:
+        - email
+        - motivo
+      type: object
+      properties:
+        email:
+          type: string
+        motivo:
+          type: string
+    NewsletterCancelamento:
+      type: object
+      properties:
+        id:
+          type: integer
+        motivo:
+          type: string
+        dataCancelamento:
+          type: string
+          format: date
+        ip:
+          type: string
+    Newsletter:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        dataCadastro:
+          type: string
+          format: date
+        ip:
+          type: string
+    StatusRetorno:
+      type: string
+      enum:
+        - PROCESSANDO
+        - REGISTROSLOCALIZADOS
+        - NENHUMREGISTROSLOCALIZADOS
+        - ERROFORNECEDOR
+    InsumoConsultaHistoricoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+        transaction:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusRetorno'
+        idConsult:
+          type: string
+        nameConsult:
+          type: string
+        desciptionConsult:
+          type: string
+        typeConsult:
+          $ref: '#/components/schemas/TipoConsulta'
+    RetornoCompraDto:
+      type: object
+      properties:
+        transacao:
+            type: string
+        tipoPagamento:
+            $ref: '#/components/schemas/TipoPagamento'
+        valorFinal:
+            type: number
+        situacaoPagamento:
+            $ref: '#/components/schemas/SituacaoPagamento'
+        detalhamentoBoleto:
+            $ref: '#/components/schemas/DetalhamentoBoleto'
+    DetalhamentoBoleto:
+      type: object
+      properties:
+        id:
+          type: integer
+        version:
+          type: number
+        identificador:
+          type: string
+        barcode:
+          type: string
+        barcodeFormatado:
+          type: string
+        pdf:
+          type: string
+        dataVencimento:
+          type: string
+          format: date
+    RetornoValorCompraDto:
+      type: object
+      properties:
+        valorCompra:
+          type: number
+        valorDesconto:
+          type: number
+        quantidadeParcelas:
+          type: number
+        valorJuros:
+          type: number
+        valorFinal:
+          type: number
+        valorParcela:
+          type: number
+        descricao:
+          type: string
+        valorCupomDesconto:
+          type: number
+        valorSaldoCarteiraUtilizado:
+          type: number
+    BandeiraCartaoDTO:
+      type: object
+      properties:
+        nome:
+          type: integer
+        bandeira:
+          type: string
+        qtdDigitosCartao:
+          type: string
+        qtdDigitosCvv:
+          type: string
+        imagem:
+          type: string
+    DadosCartao:
+      type: object
+      properties:
+        id:
+          type: integer
+        bandeira:
+          type: string
+        ultimosDigitos:
+          type: string
+        token:
+          type: string
+        dadosCartao:
+          type: string
+        statusCartao:
+          $ref: '#/components/schemas/StatusCartao'
+        cliente:
+            $ref: '#/components/schemas/Cliente'
+        imagemBandeira:
+          type: number
+    StatusCartao:
+      type: string
+      enum:
+        - REMOVIDO
+        - ATIVO
+        - PENDENTE
+    TipoPagamento:
+      type: string
+      enum:
+        - BOLETO
+        - CARTAO
+        - DEBITO
+        - SALDO
+    SituacaoCupom:
+      type: string
+      enum:
+        - VALID
+        - INVALID
+        - NOTEXIST
+        - USED
+        - UNRELATED_CONSULT
+    OrigemPagamento:
+      type: string
+      enum:
+        - IUGU
+        - PAG_SEGURO
+    SituacaoPagamento:
+      type: string
+      enum:
+        - AGUARDANDO
+        - APROVADO
+        - CANCELADO
+        - DISPONIVEL
+        - EM_DISPUTA
+        - DEVOLVIDA
+        - ERRO_PAGAMENTO
+    CartaoEnum:
+      type: string
+      enum:
+        - AURA
+        - HIPERCARD
+        - ELO
+        - MASTERCARD
+        - MAESTRO
+        - AMEX
+        - DINERS
+        - DISCOVER
+        - JCB
+        - VISA
+        - UNKNOWN
+    ConsultaVeiculoDto:
+      type: object
+      properties:
+        id:
+           type: integer
+        date:
+          type: string
+          format: date
+        plate:
+          type: string
+        token:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusUsuario'
+        usuarioCliente:
+          $ref: '#/components/schemas/UsuarioDto'
+        resume:
+          $ref: '#/components/schemas/ResumeDto'
+        composta:
+          $ref: '#/components/schemas/Composta'
+        consultaFinalizada:
+          type: boolean
+        consultaErro:
+          type: boolean
+    ResumeDto:
+      type: object
+      properties:
+        plate:
+           type: string
+        chassi:
+          type: string
+        brandPhoto:
+          type: string
+        brand:
+          type: string
+        model:
+           type: string
+        city:
+          type: string
+        uf:
+          type: string
+        color:
+          $ref: '#/components/schemas/EnumCor'
+        manufactureYear:
+           type: integer
+        modelYear:
+          type: integer
+        displacement:
+          type: integer
+        combustivel:
+          $ref: '#/components/schemas/EnumCombustivel'
+        codeFipe:
+          type: string
+        vehicleType:
+          $ref: '#/components/schemas/EnumTipoVeiculo'
+        listConsultOutput:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsultOutput'
+    ConsultOutput:
+      type: object
+      properties:
+        name:
+           type: string
+        label:
+          type: string
+        obs:
+          type: string
+        description:
+          type: string
+        status:
+          $ref: '#/components/schemas/SituacaoConsulta'
+        value:
+          type: object
+        type:
+          $ref: '#/components/schemas/TypeObject'
+        data:
+          type: array
+          items:
+           $ref: '#/components/schemas/ConsultOutput'
+        columnNames:
+          type: array
+          items:
+            type: string
+    CompraDto:
+      type: object
+      properties:
+        id:
+           type: integer
+        transacao:
+          type: string
+        cliente:
+          $ref: '#/components/schemas/UsuarioDto'
+        detalhamentoCompra:
+          $ref: '#/components/schemas/DetalhamentoCompraDto'
+        detalhamentoBoleto:
+          $ref: '#/components/schemas/DetalhamentoBoletoDto'
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamento'
+        origemPagamento:
+          $ref: '#/components/schemas/OrigemPagamento'
+        listaHistoricoStatusCompra:
+          type: array
+          items:
+           $ref: '#/components/schemas/HistoricoStatusCompraPainelDto'
+        cupomDesconto:
+          $ref: '#/components/schemas/CupomDescontoDto'
+        listaItemCompra:
+          type: array
+          items:
+           $ref: '#/components/schemas/ItemCompraDTO'
+        origemCompra:
+          $ref: '#/components/schemas/OrigemCompra'
+    DetalhamentoCompraDto:
+      type: object
+      properties:
+        id:
+           type: integer
+        version:
+          type: integer
+        valorCompra:
+          type: number
+        valorJuros:
+          type: number
+        valorDesconto:
+          type: number
+        valorSaldo:
+          type: number
+        valorParcela:
+          type: number
+        valorFinal:
+          type: number
+        quantidadeParcelas:
+          type: integer
+        placaEntrada:
+          type: string
+    DadosContaDTO:
+      type: object
+      properties:
+        razaoSocial:
+           type: string
+        cnpj:
+          type: string
+        cpf:
+          type: string
+        tipoPessoa:
+          type: string
+        cep:
+          type: string
+        telefone:
+          type: string
+        numero:
+          type: integer
+        endereco:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: string
+        uf:
+          type: string
+        nome:
+          type: string
+        dataNascimento:
+          type: string
+          format: date
+    DetalhamentoBoletoDto:
+      type: object
+      properties:
+        id:
+           type: integer
+        identificador:
+          type: string
+        pdf:
+          type: string
+        dataVencimento:
+          type: string
+          format: date
+    HistoricoStatusCompraPainelDto:
+      type: object
+      properties:
+        id:
+           type: integer
+        situacaoPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        data:
+          type: string
+          format: date
+    HistoricoStatusCompraDTO:
+      type: object
+      properties:
+        idCompra:
+           type: integer
+        dataCompra:
+          type: string
+          format: date
+        situacaoPagamento:
+          $ref: '#/components/schemas/SituacaoPagamento'
+        tipoPagamento:
+          $ref: '#/components/schemas/TipoPagamento'
+        valorCompra:
+           type: number
+        token:
+          type: string
+    ItemCompraDTO:
+      type: object
+      properties:
+        quantidade:
+           type: integer
+        valorPago:
+          type: number
+        produto:
+          $ref: '#/components/schemas/CompostaDTO'
+    ViaCepDTO:
+      type: object
+      properties:
+        cep:
+           type: string
+        logradouro:
+          type: string
+        complemento:
+          type: string
+        bairro:
+          type: string
+        cidade:
+          type: boolean
+        estado:
+          type: integer
+        numero:
+          type: string
+    ConsultaTelaDto:
+      type: object
+      properties:
+        id:
+           type: integer
+        nome:
+          type: string
+        video:
+          type: string
+        descricao:
+          type: string
+        principal:
+          type: boolean
+        valor:
+          type: integer
+        exemplo:
+          type: string
+    ResponseXmlPagSeguroDto:
+      type: object
+      properties:
+        result:
+           type: string
+        errors:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+        statusRequest:
+          type: integer
+
+    TypeObject:
+      type: string
+      enum:
+        - STR
+        - INT
+        - DOUBLE
+        - OBJ
+        - DATE
+        - BOOL
+        - ENUM_COMBUSTIVEL
+        - ENUM_COR
+        - ENUM_ESPECIE_VEICULO
+        - ENUM_OPCIONAIS_ACESSORIOS
+        - ENUM_SEMAFORO
+        - ENUM_TIPO_VEICULO,
+        - BLOCO
+        - BLOCO_CONDENSADO
+        - CHART
+        - CONSULT
+        - PROGRESS
+        - PHOTO
+        - ENUM_PROCEDENCIA_VEICULO
+        - ENUM_SITUACAO_VEICULO    
+    TipoConsulta:
+      type: string
+      enum:
+        -  AGREGADOS
+        -  LEILAO
+        -  LEILAOABSOLUTA
+        -  LEILAOINFOCAR
+        -  LEILAOAUTORISCO
+        -  GRAVAME
+        -  DECODIFICADOR
+        -  PRECIFICADOR
+        -  RECALL
+        -  DUPLICIDADEMOTOR
+        -  DESVALORIZACAOMEDIA
+        -  PRECOMERCADO
+        -  INDICIOSINISTRO
+        -  INDICIOSINISTRO2
+        -  INDICIOSINISTRO3
+        -  REMARKETING
+        -  PARECERTECNICO
+        -  PRECOMERCADOWEBMOTORS
+        -  PRECOMERCADOMOLICAR
+        -  PRECOMERCADOKBB
+        -  PRECOMERCADOMOTORHUB

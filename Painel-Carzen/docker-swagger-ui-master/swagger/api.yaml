@@ -1,0 +1,1519 @@
+---
+openapi: 3.0.3
+info:
+  title: Painel Carzen API
+  description: Documentaçao da Api painel Carzen <br><br>[https://painel.carzen.com.br/](https://painel.carzen.com.br/) <br><br> Usar essa chave dentro das aspas para autorizar requisiçoes <br> <br> KEY:"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ7XCJpZFwiOjMyLFwibmFtZVwiOlwiVml0b3JcIixcImVtYWlsXCI6XCJ2aXRvckBzYXpzby5jb20uYnJcIixcInN0YXR1c1wiOlwiQVRJVk9cIixcInVzZXJBY2Nlc3NcIjp7XCJjdXN0b21lclwiOnRydWUsXCJjb25zdWx0SGlzdG9yaWNcIjp0cnVlLFwicGF5bWVudEhpc3RvcmljXCI6dHJ1ZSxcImRpc2NvbnRDb3Vwb25cIjp0cnVlLFwicmVwb3J0XCI6ZmFsc2UsXCJhdWRpdFwiOnRydWUsXCJub3RpZmljYXRpb25zXCI6ZmFsc2UsXCJhY2Nlc3NDb250cm9sXCI6dHJ1ZX19IiwiZXhwIjoxNjU0MDIyOTcxLCJpYXQiOjE2NTQwMDg1NzF9.vqVgGrPGibH6a--O4MMF8b7-Dmr-bcb3q_e_QR9FcRU"
+  version: "1.1"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+servers:
+  - url: http://localhost:8081/
+    description: Main (localhost)
+  - url: https://api.homologacao.carzen.com.br/
+    description: Main (homologaçao)
+  - url: https://painel.carzen.com.br/
+    description: Main (produção)    
+    
+tags:
+- name: "Client"
+  description: "Endpoints e funcionalidades de /client/{...}"
+  externalDocs:
+    description: ""
+    url: "http://localhost:8081/swagger-ui/#/"
+- name: "Audilog"
+  description: "Endpoints e funcionalidades de audilog/{...}"
+- name: "Consult"
+  description: "Endpoints e funcionalidades de consult/{...}"
+- name: "DiscountCoupon"
+  description: "Endpoints e funcionalidades de discountCoupon/{...}"
+- name: "NewsLetter"
+  description: "Endpoints e funcionalidades de newsletter/{...}"
+- name: "Shoppping"
+  description: "Endpoints e funcionalidades de shopping/{...}"
+- name: "UserPanel"
+  description: "Endpoints e funcionalidades de userpanel/{...}"
+paths:
+  /audilog/list:
+    post:
+      tags:
+      - "Audilog"
+      description: "Essa rota é responsável pelo registro de eventos (log) das açoes um usuario administrador, e como parametros suas respectivas informações detalhadas."
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListAuditLog'
+  /audilog/report:
+    get:
+      tags:
+      - "Audilog"
+      description: "Essa rota é responsável por descrever o processo de registro de eventos (log) das açoes um usuario administrador e sua respectiva justificativa pela ação realizada."
+      parameters:
+      - name: endDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: startDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: user
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /client/acceptedTerms:
+    get:
+      tags:
+      - "Client"
+      description: Essa rota é responsável por captar todos registros de aceitação dos termos de uso de cada usuário.
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /client/deletionRequest/{id}:
+    get:
+      tags:
+      - "Client"
+      description: Essa rota é responsável pela requisição de deletar um usuario pelo id.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /client/editClient:
+    post:
+      tags:
+      - "Client"
+      description: Essa rota é responsável pela edição dos dados de um usuario.
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /client/getClient/{id}:
+    get:
+      tags:
+      - "Client"
+      description: Essa rota é responsável por encontrar um usuario e todas suas informaçoes pelo id.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserClientModel'
+  /client/list:
+    post:
+      tags:
+      - "Client"
+      description: Essa rota é responsável pela listagem de todos usuarios e suas respectivas informaçoes detalhadas.
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListUserClientModel'
+  /client/qtdAvailableConsultations:
+    post:
+      tags:
+      - "Client"
+      description: Essa rota é responsável por editar o tipo e a quantidade de consultas que o usuario possui, pelo parametro <br>  {<br> "nomeConsulta":"string",<br> "idCreditoConsulta":2,<br>"qtdDisponivel":2<br>}.
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListAvailableConsultationsModel'
+  /client/report:
+    get:
+      tags:
+      - "Client"
+      description: "Essa rota é responsável  por listar os dados cadastrais de todos usuarios em XML (download do Excel pela url)."
+      parameters:
+      - name: document
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: startDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /client/saveAvailableConsultations:
+    post:
+      tags:
+      - "Client"
+      description: "Essa rota é responsavel por salvar as consultas disponíveis."
+      parameters:
+      - name: idClient
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: "Created"
+  /client/toggleStatus/{id}:
+    get:
+      tags:
+      - "Client"
+      description: Essa rota é responsavel por alternar o status do usuario. 
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /client/validDocument:
+    get:
+      tags:
+      - "Client"
+      description: Essa rota é responsavel por obter o validação do documento do usuario se é cnpj ou cpf.
+      parameters:
+      - name: document
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /client/wallet/{idCliente}:
+    get:
+      tags:
+      - "Client"
+      description: Essa rota é responsavel por obter as informaçoes da carteira do usuario.
+      parameters:
+      - name: idCliente
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListWalletClientModel'
+  /consult/consults:
+    get:
+      tags:
+      - "Consult"
+      description: "Essa rota é responsavel pelo retorno da quantidade de consultas compostas e seus respectivos nomes."
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListCompostaModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResultListCompostaModel'
+  /consult/input/{tokenConsulta}:
+    get:
+      tags:
+      - "Consult"
+      description: "Pelo token da consulta essa rota é responsavel por descrever todos seus detalhes e caracteristicas."
+      parameters:
+      - name: tokenConsulta
+        in: path
+        required: true
+        schema:
+          type: string
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListInputConsultModel'
+  /consult/list:
+    post:
+      tags:
+      - "Consult"
+      description: "Essa rota é responsavel por editar uma consulta."
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListConsultVehicleModel'
+  /consult/provider/{tokenConsulta}:
+    get:
+      tags:
+      - "Consult"
+      description: "Essa rota é responsavel por trazer o provedor de uma consulta pelo token."
+      parameters:
+      - name: tokenConsulta
+        in: path
+        required: true
+        schema:
+          type: string
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListProviderConsultModel'
+  /consult/report:
+    get:
+      tags:
+      - "Consult"
+      description: "Esta rota é responsavel por trazer relatorio de consultas."
+      parameters:
+      - name: document
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: idClient
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: plate
+        in: query
+        schema:
+          type: string
+      - name: startDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /discountCoupon/edit/{idDiscountCoupon}:
+    post:
+      tags:
+      - "DiscountCoupon"
+      description: "Esta rota é pela ediçao de um cupom existente usando o id do cupom para localizar e editar"
+      parameters:
+      - name: idDiscountCoupon
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /discountCoupon/existsCoupom/{codigo}:
+    get:
+      tags:
+      - "DiscountCoupon"
+      description: "Esta rota é responsavel para verificaçao do cupom na hora do pagamento com cupom"
+      parameters:
+      - name: codigo
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+        "204":
+          description: No Content
+  /discountCoupon/getCupom/{idCupom}:
+    get:
+      tags:
+      - "DiscountCoupon"
+      description: "Rota responsavel pelo retorno do cupom pelo id"
+      parameters:
+      - name: idCupom
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscountCoupon'
+  /discountCoupon/list:
+    post:
+      tags:
+      - "DiscountCoupon"
+      description: "Esta rota é responsavel pelo retorno da lista de cupons"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListDiscountCoupon'
+  /discountCoupon/new:
+    post:
+      tags:
+      - "DiscountCoupon"
+      description: "Esta rota é responsavel pela criaçao de novos cupons acessando a classe 'DiscountCoupon(codigo, valorDesconto, quantidadeVenda, tipoCupomDesconto, ativo, dataFim, dataInicio, UnicoPorUsuario)'"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+               schema:
+                 $ref: "#/components/schemas/DiscountCoupon"
+  /newsletter/report:
+    get:
+      tags:
+      - "NewsLetter"
+      description: Essa rota é responsavel por obter o boletin de relatórios.
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /newsletter/reportCanceled:
+    get:
+      tags:
+      - "NewsLetter"
+      description: Essa rota é responsavel por obter o boletin de relatórios cancelados.
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /shopping/list:
+    post:
+      tags:
+      - "Shoppping"
+      description: "Esta rota é responsavel pelo retorno da lista de compras efetuadas"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListShoppingModel'
+  /shopping/purchaseCancel:
+    post:
+      tags:
+      - "Shoppping"
+      description: "Esta rota é responsavel pelo armazenamento de dados de compras canceladas"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /shopping/purchaseRefund:
+    post:
+      tags:
+      - "Shoppping"
+      description: "Esta rota é responsavel pelo armazenamento de dados de comprar reembolsadas"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /shopping/report:
+    get:
+      tags:
+      - "Shoppping"
+      description: "Essa rota é responsavel pelo armazenamento de historico de compras feitas, canceladas e reembolsadas"
+      parameters:
+      - name: discountCoupon
+        in: query
+        schema:
+          type: string
+      - name: document
+        in: query
+        schema:
+          type: string
+      - name: email
+        in: query
+        schema:
+          type: string
+      - name: endDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: idClient
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: idComposta
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: startDate
+        in: query
+        schema:
+          format: int64
+          type: integer
+      - name: statusPayment
+        in: query
+        schema:
+          $ref: '#/components/schemas/StatusPayment'
+      - name: typePayment
+        in: query
+        schema:
+          $ref: '#/components/schemas/TypePayment'
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+  /testeCep:
+    get:
+      tags:
+      - "TesteCep"
+      description: "Essa rota é responsavel por obter o logradouro via cep."
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TesteModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/TesteModel'
+  /userPanel/changePassword:
+    get:
+      tags:
+      - "UserPanel"
+      description: "Rota para alteraçao de senha onde é enviado um email com token resetado"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /userPanel/confirmResetPasswordUser:
+    post:
+      tags:
+      - "UserPanel"
+      description: "Rota para confirmar o novo token recebido por email e cadastrar a nova senha"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /userPanel/edit/{idUserPanel}:
+    post:
+      tags:
+      - "UserPanel"
+      description: "Rota responsavel pra editar usuario encontrado pelo id e setando email, nome e status, esta rota tambem verifica se o usuario tem permissao para editar, caso nao tenha é retornado uma mensagem de erro 'Você não tem permissão para editar outro usuário'"
+      parameters:
+      - name: idUserPanel
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /userPanel/existsEmail/{email}:
+    get:
+      tags:
+      - "UserPanel"
+      description: "Esta rota é responsavel pela verificaçao se o email informado ja é existenta, caso for retorna mensagem de erro 'E-mail informado, está cadastrado para outro usuário'"
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /userPanel/list:
+    post:
+      tags:
+      - "UserPanel"
+      description : "Esta rota é responsavel pela carregamento da lista de usuarios do painel e seus dados"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultListUserPanelDto'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResultListUserPanelDto'
+  /userPanel/login:
+    post:
+      description: "Esta rota é responsavel pelo entrada do usuario, validando o login, transformando a senha em um algoritimo HMAC256 e caso dados invalidos é retornado mensagem de erro 'Usuario ou senha inválido'"
+      tags:
+      - "UserPanel"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+  /userPanel/new:
+    post:
+      description : "Esta rota é responsavel pela criaçao de um novo usuario, e é testado se o email que esta sendo cadastrado ja existe, caso exista é retornado um erro com a mensagem ' E-mail informado já esta cadastrado ' "
+      tags:
+      - "UserPanel"
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "201":
+          description: Created
+  /userPanel/resetPassword/{idUserPanel}:
+    get:
+      description: "Esta rota é responsavel por identificar o id informado que deseja resetar a senha, e fazer o envio do email com o token para reset de senha"
+      tags:
+      - "UserPanel"
+      parameters:
+      - name: idUserPanel
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /userPanel/resetPasswordEmail:
+    get:
+      description: "Esta rota é responsavel por identificar o email informado que deseja resetar a senha, e fazer o envio do email com o token para reset de senha"
+      tags:
+      - "UserPanel"
+      parameters:
+      - name: email
+        in: query
+        schema:
+          type: string
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /userPanel/toggleStatus/{idUserPanel}:
+    get:
+      description: "Esta rota é responsavel por identificar o id do usuario é informar se o status deste usuario esta 'Ativo' ou 'Desabilitado' e faz a alteraçao do status pelo toggle button"
+      tags:
+      - "UserPanel"
+      parameters:
+      - name: idUserPanel
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "204":
+          description: No Content
+  /userPanel/{idUserPanel}:
+    get:
+      description: "Esta rota é responsavel pelo retorno do usuario localizado pelo id"
+      tags:
+      - "UserPanel"
+      parameters:
+      - name: idUserPanel
+        in: path
+        required: true
+        schema:
+          format: int64
+          type: integer
+      security:
+       - ApiKeyAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPanelDto'
+components:
+  securitySchemes:
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: Authorization  # name of the header, query parameter or cookie
+  schemas:
+    Date:
+      format: date
+      type: string
+    ClientModel:
+      type: object
+      properties:
+        addressClient:
+          $ref: '#/components/schemas/AddressClientModel'
+        companyName:
+          type: string
+        credits:
+          format: double
+          type: number
+        document:
+          type: string
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        phone:
+          type: string
+        referralToken:
+          type: string
+        registrationDate:
+          $ref: '#/components/schemas/Date'
+        typePersonRegistration:
+          $ref: '#/components/schemas/TipoPessoa'
+    StatusUsuario:
+      enum:
+      - ATIVO
+      - EXCLUIDO
+      - INATIVO
+      type: string
+    TypeRegistration:
+      enum:
+      - COMPLETO
+      - SIMPLES
+      - SIMPLESATUALIZADO
+      type: string
+    AddressClientModel:
+      type: object
+      properties:
+        address:
+          type: string
+        city:
+          type: string
+        complement:
+          type: string
+        id:
+          format: int64
+          type: integer
+        neighborhood:
+          type: string
+        number:
+          format: int32
+          type: integer
+        state:
+          type: string
+        zipCode:
+          type: string
+    TipoPessoa:
+      enum:
+      - FISICA
+      - JURIDICA
+      type: string
+    UserClientModel:
+      required:
+      - email
+      - name
+      type: object
+      properties:
+        birthDate:
+          $ref: '#/components/schemas/Date'
+        client:
+          $ref: '#/components/schemas/ClientModel'
+        email:
+          pattern: \S
+          type: string
+          nullable: false
+        facebookUser:
+          type: boolean
+        googleUser:
+          type: boolean
+        id:
+          format: int64
+          type: integer
+        name:
+          pattern: \S
+          type: string
+          nullable: false
+        status:
+          $ref: '#/components/schemas/StatusUsuario'
+        tokenFacebook:
+          type: string
+        tokenGoogle:
+          type: string
+        typeRegistration:
+          $ref: '#/components/schemas/TypeRegistration'
+    ListUserClientModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserClientModel'
+    ResultListUserClientModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListUserClientModel'
+    AvailableConsultationsModel:
+      type: object
+      properties:
+        nomeConsulta:
+          type: string
+        idCreditoConsulta:
+          format: int64
+          type: integer
+        qtdDisponivel:
+          format: int32
+          type: integer
+    ListAvailableConsultationsModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/AvailableConsultationsModel'
+    ResultListAvailableConsultationsModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListAvailableConsultationsModel'
+    WalletClientModel:
+      type: object
+      properties:
+        quantidade:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        nome:
+          type: string
+    ListWalletClientModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/WalletClientModel'
+    ResultListWalletClientModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListWalletClientModel'
+    CompostaModel:
+      type: object
+      properties:
+        description:
+          type: string
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        urlExample:
+          type: string
+        video:
+          type: string
+    ListCompostaModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/CompostaModel'
+    ResultListCompostaModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListCompostaModel'
+    ConsultVehicleModel:
+      type: object
+      properties:
+        composta:
+          $ref: '#/components/schemas/CompostaModel'
+        consultaErro:
+          type: boolean
+        consultaFinalizada:
+          type: boolean
+        date:
+          $ref: '#/components/schemas/Date'
+        id:
+          format: int64
+          type: integer
+        resume:
+          $ref: '#/components/schemas/ResumeModel'
+        status:
+          $ref: '#/components/schemas/StatusUsuario'
+        token:
+          type: string
+        usuarioCliente:
+          $ref: '#/components/schemas/UserClientModel'
+    ListConsultVehicleModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConsultVehicleModel'
+    ResumeModel:
+      type: object
+      properties:
+        brand:
+          type: string
+        chassi:
+          type: string
+        codeFipe:
+          type: string
+        manufactureYear:
+          format: int32
+          type: integer
+        model:
+          type: string
+        modelYear:
+          format: int32
+          type: integer
+        plate:
+          type: string
+    ResultListConsultVehicleModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListConsultVehicleModel'
+    InputConsultModel:
+      type: object
+      properties:
+        desciptionConsult:
+          type: string
+        id:
+          format: int64
+          type: integer
+        idConsult:
+          format: int64
+          type: integer
+        nameConsult:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusConsultEnum'
+        transaction:
+          type: string
+        typeConsult:
+          $ref: '#/components/schemas/TypeConsultEnum'
+    ListInputConsultModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/InputConsultModel'
+    StatusConsultEnum:
+      enum:
+      - ERROFORNECEDOR
+      - NENHUMREGISTROSLOCALIZADOS
+      - PROCESSANDO
+      - REGISTROSLOCALIZADOS
+      type: string
+    TypeConsultEnum:
+      enum:
+      - AGREGADOS
+      - DECODIFICADOR
+      - DESVALORIZACAOMEDIA
+      - DUPLICIDADEMOTOR
+      - GRAVAME
+      - INDICIOSINISTRO
+      - INDICIOSINISTRO2
+      - LEILAO
+      - LEILAO2
+      - PARECERTECNICO
+      - PRECIFICADOR
+      - PRECOMERCADO
+      - PRECOMERCADOKBB
+      - PRECOMERCADOMOLICAR
+      - PRECOMERCADOMOTORHUB
+      - PRECOMERCADOWEBMOTORS
+      - RECALL
+      - REMARKETING
+      type: string
+    ResultListInputConsultModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListInputConsultModel'
+    ProviderConsultModel:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
+    ListProviderConsultModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProviderConsultModel'
+    ResultListProviderConsultModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListProviderConsultModel'
+    CompostaModel1:
+      type: object
+      properties:
+        description:
+          type: string
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        value:
+          format: double
+          type: number
+    ListCompostaModel1:
+      type: array
+      items:
+        $ref: '#/components/schemas/CompostaModel1'
+    TypeCoupon:
+      enum:
+      - ABSOLUTE
+      - PERCENT
+      type: string
+    DiscountCoupon:
+      required:
+      - active
+      - discountValue
+      - onlyPerUSer
+      - quantity
+      - relatedToConsult
+      - startDate
+      - typeCoupon
+      type: object
+      properties:
+        active:
+          type: boolean
+          nullable: false
+        code:
+          pattern: \S
+          type: string
+          nullable: false
+        consults:
+          $ref: '#/components/schemas/ListCompostaModel1'
+        discountValue:
+          format: double
+          minimum: 0.01
+          type: number
+          nullable: false
+        endDate:
+          $ref: '#/components/schemas/Date'
+        id:
+          format: int64
+          type: integer
+        onlyPerUSer:
+          type: boolean
+          nullable: false
+        quantity:
+          format: int64
+          type: integer
+          nullable: false
+        relatedToConsult:
+          type: boolean
+          nullable: false
+        startDate:
+          allOf:
+          - $ref: '#/components/schemas/Date'
+          - nullable: false
+        typeCoupon:
+          allOf:
+          - $ref: '#/components/schemas/TypeCoupon'
+          - enum:
+            - ABSOLUTE
+            - PERCENT
+            nullable: false
+    ListDiscountCoupon:
+      type: array
+      items:
+        $ref: '#/components/schemas/DiscountCoupon'
+    ResultListDiscountCoupon:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListDiscountCoupon'
+    ShoppingModel:
+      type: object
+      properties:
+        billetDetail:
+          $ref: '#/components/schemas/BilletDetail'
+        discountCoupon:
+          $ref: '#/components/schemas/DiscountCoupon'
+        id:
+          format: int64
+          type: integer
+        listComposta:
+          $ref: '#/components/schemas/ListCompostaModel1'
+        paymentMethod:
+          $ref: '#/components/schemas/PaymentMethod'
+        purchaseDate:
+          $ref: '#/components/schemas/Date'
+        purchaseSource:
+          $ref: '#/components/schemas/PurchaseSource'
+        shoppingDetail:
+          $ref: '#/components/schemas/ShoppingDetailModel'
+        shoppingItens:
+          $ref: '#/components/schemas/ListItemModelExternal'
+        shoppingStatusHistory:
+          $ref: '#/components/schemas/ListShoppingStatusHistoryModel'
+        statusPaymentShopping:
+          type: string
+        transction:
+          type: string
+        typePayment:
+          $ref: '#/components/schemas/TypePayment'
+        userClient:
+          $ref: '#/components/schemas/UserClientModel'
+    ListShoppingModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/ShoppingModel'
+    BilletDetail:
+      type: object
+      properties:
+        dueDate:
+          $ref: '#/components/schemas/Date'
+        id:
+          format: int64
+          type: integer
+        identifier:
+          type: string
+        pdf:
+          type: string
+    PaymentMethod:
+      enum:
+      - IUGU
+      - PAG_SEGURO
+      type: string
+    PurchaseSource:
+      enum:
+      - APP
+      - WEB
+      type: string
+    ShoppingDetailModel:
+      type: object
+      properties:
+        balanceAmount:
+          format: double
+          type: number
+        discountAmount:
+          format: double
+          type: number
+        finalValue:
+          format: double
+          type: number
+        id:
+          format: int64
+          type: integer
+        inputPlaca:
+          type: string
+        installmentAmount:
+          format: int32
+          type: integer
+        installmentValue:
+          format: double
+          type: number
+        interestAmount:
+          format: double
+          type: number
+        purcharseAmount:
+          format: double
+          type: number
+        version:
+          format: int32
+          type: integer
+    ItemModelExternal:
+      type: object
+      properties:
+        produto:
+          $ref: '#/components/schemas/CompostaModelExternal'
+        quantidade:
+          format: int32
+          type: integer
+        valorPago:
+          format: double
+          type: number
+    ListItemModelExternal:
+      type: array
+      items:
+        $ref: '#/components/schemas/ItemModelExternal'
+    ShoppingStatusHistoryModel:
+      type: object
+      properties:
+        date:
+          $ref: '#/components/schemas/Date'
+        id:
+          format: int64
+          type: integer
+        statusPayment:
+          $ref: '#/components/schemas/StatusPayment'
+    ListShoppingStatusHistoryModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/ShoppingStatusHistoryModel'
+    TypePayment:
+      enum:
+      - BOLETO
+      - CARTAO
+      - DEBITO
+      - SALDO
+      type: string
+    StatusPayment:
+      enum:
+      - AGUARDANDO
+      - APROVADO
+      - CANCELADO
+      - DEVOLVIDA
+      - DISPONIVEL
+      - EM_DISPUTA
+      - ERRO_PAGAMENTO
+      type: string
+    CompostaModelExternal:
+      type: object
+      properties:
+        descricao:
+          type: string
+        id:
+          format: int64
+          type: integer
+        nome:
+          type: string
+        valorConsulta:
+          format: double
+          type: number
+    ResultListShoppingModel:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListShoppingModel'
+    TesteModel:
+      type: object
+      properties:
+        cep:
+          type: string
+        logradouro:
+          type: string
+    AuditLog:
+      type: object
+      properties:
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+        date:
+          $ref: '#/components/schemas/Date'
+        id:
+          format: int64
+          type: integer
+        idObject:
+          format: int64
+          type: integer
+        justification:
+          type: string
+        object:
+          type: string
+        pathAction:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserPanelModel'
+    ListAuditLog:
+      type: array
+      items:
+        $ref: '#/components/schemas/AuditLog'
+    ActionEnum:
+      enum:
+      - CREATE
+      - DELETE
+      - EDIT
+      - PURCHASE_CANCEL
+      - PURCHASE_REFOUND
+      - STATUS
+      - USER_DELETION
+      type: string
+    UserPanelModel:
+      type: object
+      properties:
+        email:
+          type: string
+        id:
+          format: int64
+          type: integer
+        userAccess:
+          $ref: '#/components/schemas/ListUserAccessControlModel'
+        name:
+          type: string
+        salt:
+          type: string
+        status:
+          $ref: '#/components/schemas/StatusUser'
+        tokenResetPassword:
+          type: string
+    UserAccessControlModel:
+      type: object
+      properties:
+        accessControl:
+          $ref: '#/components/schemas/AccessControlModel'
+        id:
+          format: int64
+          type: integer
+    ListUserAccessControlModel:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserAccessControlModel'
+    StatusUser:
+      enum:
+      - ATIVO
+      - DESABILITADO
+      type: string
+    AccessControlModel:
+      type: object
+      properties:
+        action:
+          type: string
+        id:
+          format: int64
+          type: integer
+    ResultListAuditLog:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListAuditLog'
+    UserAccessDto:
+      required:
+      - accessControl
+      - audit
+      - consultHistoric
+      - customer
+      - discontCoupon
+      - notifications
+      - paymentHistoric
+      - report
+      type: object
+      properties:
+        accessControl:
+          type: boolean
+          nullable: false
+        audit:
+          type: boolean
+          nullable: false
+        consultHistoric:
+          type: boolean
+          nullable: false
+        customer:
+          type: boolean
+          nullable: false
+        discontCoupon:
+          type: boolean
+          nullable: false
+        notifications:
+          type: boolean
+          nullable: false
+        paymentHistoric:
+          type: boolean
+          nullable: false
+        report:
+          type: boolean
+          nullable: false
+    UserPanelDto:
+      required:
+      - status
+      - userAccess
+      type: object
+      properties:
+        email:
+          pattern: \S
+          type: string
+          nullable: false
+        id:
+          format: int64
+          type: integer
+        name:
+          pattern: \S
+          type: string
+          nullable: false
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusUser'
+          - enum:
+            - ATIVO
+            - DESABILITADO
+            nullable: false
+        userAccess:
+          allOf:
+          - $ref: '#/components/schemas/UserAccessDto'
+          - nullable: false
+    ListUserPanelDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserPanelDto'
+    ResultListUserPanelDto:
+      type: object
+      properties:
+        count:
+          format: int64
+          type: integer
+        countPage:
+          format: int64
+          type: integer
+        list:
+          $ref: '#/components/schemas/ListUserPanelDto'
