@@ -7,13 +7,13 @@
 <div class="social" >
     <a href="https://www.instagram.com/carzenbr/" >
     <img class = "icons" src="https://carzen.com.br/assets/svg/icon-instagram.svg">
-    target="_blank" </a>
+    </a>
     <a href="https://www.facebook.com/carzenbr">
     <img class = "icons" src="https://carzen.com.br/assets/svg/icon-facebook.svg">
-    target="_blank"</a>
+    </a>
     <a href="https://www.youtube.com/channel/UC8C5ROCZhcUB89vaysn7_Rg">
     <img class = "icons" src="https://carzen.com.br/assets/svg/icon-youtube.svg">
-    target="_blank"</a>
+    </a>
 </div>
 
 
@@ -31,9 +31,9 @@
     <br />
     <br /> 
     <!-- Sites do carzen-->
-    <a class="sitecarzen" href="https://carzen.com.br/" target="_blank" >Site Carzen</a>
+    <a class="sitecarzen" href="https://carzen.com.br/?target=_blank" target="_blank" >Site Carzen</a>
     ·
-    <a class="sitecarzen" href="https://painel.carzen.com.br/" target="_blank" >Painel administrativo Carzen</a>
+    <a class="sitecarzen" href="https://painel.carzen.com.br/?target=_blank" target="_blank" >Painel administrativo Carzen</a>
   </p>
 </div>
 <br>
