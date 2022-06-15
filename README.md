@@ -261,7 +261,6 @@ Todas tecnologias e IDE's usada no projeto.
 <p>Union Solutions</p>
 <p>Escritorio de t.i </p>
 <a href = "mailto: ti@unionsolutions.com.br">ti@unionsolutions.com.br
-<img src="">
 </a>
 <p>Whatspp: (27) 99840-4918
 
