@@ -22,7 +22,7 @@
 <div align="center">
   <a href="https://carzen.com.br">
     <img src="https://carzen.com.br/assets/svg/logo-gradient.svg" alt="Logo" width="380" height="80">
-    target="_blank" </a>
+    </a>
 
   <h3 align="center">Documentação</h3>
 
