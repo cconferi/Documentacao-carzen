@@ -95,7 +95,7 @@ Como foi feito :
 
 Para documentação do front-end, com suas rotas mais detalhadas acesse :
 
- * [Documentação site carzen](url)
+ * [Documentação site carzen](https://github.com/cconferi/Documentacao-carzen/blob/master/Site%20Carzen/Documentao-site-carzen.pdf)
 
  Contem um arquivo em formato PDF  mostrando a url acessada, junto com a rota e o front end que é mostrado no site.
 
@@ -110,7 +110,7 @@ Para documentação detalhando as rotas chamadas pelo backend foi usado o Swagge
 
 Ou tambem é possivel abrir o arquivo do swagger atraves do [Swagger Editor](https://editor.swagger.io/) utilizando o arquivo:
 
-* [swaggerEditor-site.yaml](url)
+* [swaggerEditor-site.yaml](https://github.com/cconferi/Documentacao-carzen/blob/master/Site%20Carzen/swaggerEditor-site.yaml)
 
 **Obs:** Para fazer testes de chamadas de rotas abrindo o .yaml via  [Swagger Editor](https://editor.swagger.io/), é preciso rodar o sistema localmente.
 
@@ -120,7 +120,7 @@ Ou tambem é possivel abrir o arquivo do swagger atraves do [Swagger Editor](htt
 
 Para detalhamento das tabelas do banco de dados, basta acessar : 
 
-* [Tabelas db Carzen](url)
+* [Tabelas db Carzen](https://github.com/cconferi/Documentacao-carzen/tree/master/Escritorio%20de%20TI%20-%20Comentarios%20banco%20de%20dados/Tabelas%20db%20Carzen)
 
 Nesta pasta ira conter todas as tabelas que contem no banco de dados,comentadas a função da tabela, das colunas e seu o relacionamento da tabela.
 
@@ -165,7 +165,7 @@ Como foi feito:
 
 Para documentação do front-end, com suas rotas mais detalhadas acesse :
 
- * [Documentação site carzen](url)
+ * [Documentação site carzen](https://github.com/cconferi/Documentacao-carzen/blob/master/Painel-Carzen/documenta%C3%A7%C3%A3o%20painel%20frontend%20%E2%86%92%20painel%20backend%20%E2%86%92%20webservice%20backend.pdf)
 
  Contem um arquivo em formato PDF  mostrando a url acessada, junto com a rota e o front end que é mostrado no site.
 
@@ -176,7 +176,7 @@ Para documentação do front-end, com suas rotas mais detalhadas acesse :
 Na documentação back-end possui Possui o swagger docker-compese e o readme
 
 
-* [Docker swagger ui master](url)
+* [Docker swagger ui master](https://github.com/cconferi/Documentacao-carzen/tree/master/Painel-Carzen/docker-swagger-ui-master)
 Para o passo a passo para encontrar o Swagger no Doc abra o Readme.
 Ou, pode visualizar o mesmo no site [https://editor.swagger.io/]
 
@@ -186,7 +186,7 @@ Ou, pode visualizar o mesmo no site [https://editor.swagger.io/]
 
 Para detalhamento das tabelas do banco de dados, basta acessar :
 
-* [Tabelas Banco de Dados](https://reactjs.org/)
+* [Tabelas Banco de Dados](https://github.com/cconferi/Documentacao-carzen/tree/master/Escritorio%20de%20TI%20-%20Comentarios%20banco%20de%20dados/tabelas%20db%20Painel%20Carzen)
 
 Nesta pasta ira conter todas as tabelas que contem no banco de dados,comentadas a função da tabela, das colunas e seu o relacionamento da tabela. 
 
