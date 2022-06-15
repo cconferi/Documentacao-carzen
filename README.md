@@ -198,35 +198,32 @@ Nesta pasta ira conter todas as tabelas que contem no banco de dados,comentadas 
 <br>
 
 
-<!-- USAGE EXAMPLES -->
+<!-- MS integração -->
 ## MS integração
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+<br>
 
-<!-- ROADMAP -->
+
 ### Back-end Ms integração
 
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+Para documentação detalhando as rotas chamadas pelo backend foi usado o Swagger.
+É possivel abrir o arquivo do swagger atraves do [Swagger Editor](https://editor.swagger.io/) utilizando o arquivo:
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+* [swagger_5-msintegracao formatado.yaml](https://github.com/cconferi/Documentacao-carzen/blob/master/ms-integra%C3%A7%C3%A3o%20-%20DOC-API/swagger_5-msintegracao%20formatado.yaml)
+
+**Obs:** Para fazer testes de chamadas de rotas abrindo o .yaml via  [Swagger Editor](https://editor.swagger.io/), é preciso rodar o sistema localmente.
 
 <br>
 
 ### Banco de dados Ms integração
 
-<!-- Loremipsum ( Falta descrever ) -->
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+No banco de dados do Ms integração foi usado mongoDB.
+Para visualizar o diagrama das tabelas basta clicar em:
+ * [MRN_msintegracao](https://github.com/cconferi/Documentacao-carzen/blob/master/ms-integra%C3%A7%C3%A3o%20-%20DOC-API/MRN_msintegracao%20(1).pdf)
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+Tem tambem alguns exemplos em:
+ * [Exemplos](https://github.com/cconferi/Documentacao-carzen/tree/master/ms-integra%C3%A7%C3%A3o%20-%20DOC-API/Exemplos)
 
 <br>
 <p align="right">(<a href="#top">Volte para o inicio ⇡ </a>)</p>
@@ -234,7 +231,7 @@ Don't forget to give the project a star! Thanks again!
 <br>
 
 
-<!-- CONTRIBUTING -->
+<!-- Tecnologias usadas no sistema -->
 ## Tecnologias
 
 Todas tecnologias e IDE's usada no projeto.
