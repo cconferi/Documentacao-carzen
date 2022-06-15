@@ -5,15 +5,15 @@
 <!-- Icones das redes sociais -->
 
 <div class="social" >
-    <a href="https://www.instagram.com/carzenbr/">
+    <a href="https://www.instagram.com/carzenbr/" >
     <img class = "icons" src="https://carzen.com.br/assets/svg/icon-instagram.svg">
-    </a>
+    target="_blank" </a>
     <a href="https://www.facebook.com/carzenbr">
     <img class = "icons" src="https://carzen.com.br/assets/svg/icon-facebook.svg">
-    </a>
+    target="_blank"</a>
     <a href="https://www.youtube.com/channel/UC8C5ROCZhcUB89vaysn7_Rg">
     <img class = "icons" src="https://carzen.com.br/assets/svg/icon-youtube.svg">
-    </a>
+    target="_blank"</a>
 </div>
 
 
@@ -22,7 +22,7 @@
 <div align="center">
   <a href="https://carzen.com.br">
     <img src="https://carzen.com.br/assets/svg/logo-gradient.svg" alt="Logo" width="380" height="80">
-  </a>
+    target="_blank" </a>
 
   <h3 align="center">Documentação</h3>
 
@@ -31,9 +31,9 @@
     <br />
     <br /> 
     <!-- Sites do carzen-->
-    <a class="sitecarzen" href="https://carzen.com.br/">Site Carzen</a>
+    <a class="sitecarzen" href="https://carzen.com.br/" target="_blank" >Site Carzen</a>
     ·
-    <a class="sitecarzen" href="https://painel.carzen.com.br/">Painel administrativo Carzen</a>
+    <a class="sitecarzen" href="https://painel.carzen.com.br/" target="_blank" >Painel administrativo Carzen</a>
   </p>
 </div>
 <br>
